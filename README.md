@@ -42,7 +42,8 @@ I build things that work, break things to learn, and occasionally make stuff tha
 ## 📊 Github Stats
 
 ![GitHub Stats](https://github-readme-stats-salesp07.vercel.app/api?username=Qwarwin4&show_icons=true&theme=chartreuse_dark&hide_border=true&bg_color=0d1117&title_color=00ff00&text_color=ffffff&icon_color=00ff00)
-![Top Languages](https://github-readme-stats-salesp07.vercel.app/api/top-langs/?username=Qwarwin4&layout=compact&theme=chartreuse_dark&hide_border=true&bg_color=0d1117&title_color=00ff00&text_color=ffffff&icon_color=00ff00)
+
+<img src="metrics.languages.svg" alt="Languages" width="480">
 
 ---
 
