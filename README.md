@@ -2,8 +2,7 @@
 
 # 👋 Hey, I'm Qwarwin
 
-### Developer · Designer · 
-Tech Enthusiast
+### Developer · Designer · Tech Enthusiast
 
 I build things that work, break things to learn, and occasionally make stuff that looks decent too.
 
