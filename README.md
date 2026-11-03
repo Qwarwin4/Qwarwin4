@@ -47,7 +47,7 @@
 ## 📊 GitHub Stats
 
 <p align="center">
-  <img src="https://github-profiles-insights.vercel.app/api/insight?username=Qwarwin4&theme=tokyonight" alt="Qwarwin4 GitHub stats and top languages" />
+  <img src="https://github-stats-xi-six.vercel.app/api/stats?user=Qwarwin4&theme=glass" alt="Qwarwin4 GitHub stats" />
 </p>
 
 ## 📬 Find me here
