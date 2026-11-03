@@ -1,32 +1,39 @@
 <div align="center">
 
 <p align="center">
-  <img src="./assets/header.svg" width="100%" alt="Header" />
+  <img src="./assets/header.svg" width="65%" alt="Header" />
 </p>
 
 ---
 
 ## 🛠️ Stuff I work with
-
-<p align="center">
-  <img src="https://skillicons.dev/icons?i=arch,linux,windows,cpp,cs,rust,haskell,dart,py,nodejs,html,css,sqlite,git,github,docker" height="48" alt="Skills Row 1" />
-  <br/>
-  <img src="https://cdn.simpleicons.org/railway/ffffff" width="48" height="48" alt="Railway" />
-  <img src="https://skillicons.dev/icons?i=heroku" width="48" height="48" alt="Heroku" />
-  <img src="https://cdn.simpleicons.org/cisco/1BA0D7" width="48" height="48" alt="Cisco" />
-  <img src="https://skillicons.dev/icons?i=ae" width="48" height="48" alt="After Effects" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/gimp/gimp-original.svg" width="48" height="48" alt="GIMP" />
-  <img src="https://cdn.simpleicons.org/krita/20A7F0" width="48" height="48" alt="Krita" />
-  <img src="https://skillicons.dev/icons?i=bash" width="48" height="48" alt="Bash" />
-  <img src="https://skillicons.dev/icons?i=powershell" width="48" height="48" alt="PowerShell" />
-</p>
+![Arch Linux](https://skillicons.dev/icons?i=arch)
+![Linux](https://skillicons.dev/icons?i=linux)
+![Windows](https://skillicons.dev/icons?i=windows)
+![C++](https://skillicons.dev/icons?i=cpp)
+![C#](https://skillicons.dev/icons?i=cs)
+![Rust](https://skillicons.dev/icons?i=rust)
+![Haskell](https://skillicons.dev/icons?i=haskell)
+![Dart](https://skillicons.dev/icons?i=dart)
+![Python](https://skillicons.dev/icons?i=py)
+![Node.js](https://skillicons.dev/icons?i=nodejs)
+![HTML5](https://skillicons.dev/icons?i=html)
+![CSS3](https://skillicons.dev/icons?i=css)
+![SQLite](https://skillicons.dev/icons?i=sqlite)
+![Git](https://skillicons.dev/icons?i=git)
+![GitHub](https://skillicons.dev/icons?i=github)
+![Docker](https://skillicons.dev/icons?i=docker)<img src="https://cdn.simpleicons.org/railway/ffffff" width="48" height="48" alt="Railway" />
+![Heroku](https://skillicons.dev/icons?i=heroku)<img src="https://cdn.simpleicons.org/cisco/1BA0D7" width="48" height="48" alt="Cisco" />
+![After Effects](https://skillicons.dev/icons?i=ae)<img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/gimp/gimp-original.svg" width="48" height="48" alt="GIMP" /><img src="https://cdn.simpleicons.org/krita/20A7F0" width="48" height="48" alt="Krita" />
+![Bash](https://skillicons.dev/icons?i=bash)
+![PowerShell](https://skillicons.dev/icons?i=powershell)
 
 ---
 
 ## 📊 Github Stats
 
 <p align="center">
-  <img src="./assets/stats.svg" width="100%" alt="GitHub Stats" />
+  <img src="./assets/stats.svg" width="60%" alt="GitHub Stats" />
 </p>
 
 ## 📬 Find me here
