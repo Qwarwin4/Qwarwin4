@@ -42,8 +42,8 @@ I build things that work, break things to learn, and occasionally make stuff tha
 
 ## 📊 Github Stats
 
-![GitHub Stats](https://github-readme-stats.vercel.app/api?username=Qwarwin4&show_icons=true&theme=radical)
-![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=Qwarwin4&layout=compact&theme=radical)
+![GitHub Stats](https://github-readme-stats-eight-theta.vercel.app/api?username=Qwarwin4&show_icons=true&theme=radical)
+![Top Langs](https://github-readme-stats-eight-theta.vercel.app/api/top-langs/?username=Qwarwin4&layout=compact&theme=radical)
 
 ## 📬 Find me here
 
