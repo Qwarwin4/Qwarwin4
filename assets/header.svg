@@ -1,0 +1,213 @@
+<svg width="850" height="290" viewBox="0 0 850 290" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Неоновое свечение для заголовка и курсора -->
+    <filter id="neon-glow" x="-30%" y="-50%" width="160%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="blur1" />
+      <feGaussianBlur stdDeviation="10" result="blur2" />
+      <feMerge>
+        <feMergeNode in="blur2" />
+        <feMergeNode in="blur1" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <filter id="soft-glow" x="-20%" y="-40%" width="140%" height="180%">
+      <feGaussianBlur stdDeviation="2.5" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <!-- Градиент для горизонтальной зеленой линии -->
+    <linearGradient id="line-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#24e500" stop-opacity="1" />
+      <stop offset="75%" stop-color="#24e500" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#24e500" stop-opacity="0" />
+    </linearGradient>
+
+    <!-- Маски для построчного эффекта печатающегося текста (цикл 12 секунд) -->
+    <clipPath id="type-line-1">
+      <rect x="140" y="15" width="0" height="75" class="mask-1" />
+    </clipPath>
+    <clipPath id="type-line-2">
+      <rect x="50" y="95" width="0" height="40" class="mask-2" />
+    </clipPath>
+    <clipPath id="type-line-3">
+      <rect x="76" y="165" width="0" height="30" class="mask-3" />
+    </clipPath>
+    <clipPath id="type-line-4">
+      <rect x="76" y="195" width="0" height="30" class="mask-4" />
+    </clipPath>
+    <clipPath id="type-line-5">
+      <rect x="76" y="225" width="0" height="35" class="mask-5" />
+    </clipPath>
+  </defs>
+
+  <style>
+    .bg { fill: #05070a; }
+    .title {
+      font: 700 54px 'Fira Code', 'JetBrains Mono', 'Courier New', monospace;
+      fill: #24e500;
+      filter: url(#neon-glow);
+    }
+    .emoji {
+      font: 48px 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', sans-serif;
+      animation: fade-emoji 12s infinite;
+    }
+    .subtitle {
+      font: 400 27px 'Fira Code', 'JetBrains Mono', 'Courier New', monospace;
+      fill: #f0f6fc;
+      letter-spacing: 0.5px;
+    }
+    .dot {
+      fill: #24e500;
+      filter: url(#soft-glow);
+    }
+    .bio {
+      font: 400 22px 'Fira Code', 'JetBrains Mono', 'Courier New', monospace;
+      fill: #e6edf3;
+      letter-spacing: 0.3px;
+    }
+
+    /* Неоновый курсор, бегущий за каждой строкой */
+    .cursor {
+      fill: #24e500;
+      filter: url(#neon-glow);
+      opacity: 0;
+    }
+
+    /* Длительность полного цикла: 12 секунд (бесконечный повтор) */
+    .mask-1 { animation: m1 12s infinite; }
+    .mask-2 { animation: m2 12s infinite; }
+    .mask-3 { animation: m3 12s infinite; }
+    .mask-4 { animation: m4 12s infinite; }
+    .mask-5 { animation: m5 12s infinite; }
+
+    .cur-1 { animation: c1 12s infinite; }
+    .cur-2 { animation: c2 12s infinite; }
+    .cur-3 { animation: c3 12s infinite; }
+    .cur-4 { animation: c4 12s infinite; }
+    .cur-5 { animation: c5 12s infinite, blink 0.6s step-end infinite; }
+
+    .fade-line { animation: lines-anim 12s infinite; }
+
+    /* 1. Строка 1 (0% -> 14%): 16 символов, ширина ~520px */
+    @keyframes m1 {
+      0% { width: 0; animation-timing-function: steps(16, end); }
+      14%, 92% { width: 520px; }
+      95%, 100% { width: 0; }
+    }
+    @keyframes c1 {
+      0% { opacity: 1; transform: translateX(0); animation-timing-function: steps(16, end); }
+      13.9% { opacity: 1; transform: translateX(520px); }
+      14%, 100% { opacity: 0; transform: translateX(520px); }
+    }
+
+    /* 2. Строка 2 (15% -> 32%): 38 символов, ширина ~640px */
+    @keyframes m2 {
+      0%, 15% { width: 0; animation-timing-function: steps(38, end); }
+      32%, 92% { width: 640px; }
+      95%, 100% { width: 0; }
+    }
+    @keyframes c2 {
+      0%, 14.9% { opacity: 0; transform: translateX(0); }
+      15% { opacity: 1; transform: translateX(0); animation-timing-function: steps(38, end); }
+      31.9% { opacity: 1; transform: translateX(640px); }
+      32%, 100% { opacity: 0; transform: translateX(640px); }
+    }
+
+    /* Появление зеленых неоновых линий (32% -> 35%) */
+    @keyframes lines-anim {
+      0%, 31% { opacity: 0; }
+      35%, 92% { opacity: 1; }
+      95%, 100% { opacity: 0; }
+    }
+    @keyframes fade-emoji {
+      0%, 92% { opacity: 1; }
+      95%, 100% { opacity: 0; }
+    }
+
+    /* 3. Строка 3 (35% -> 47%): 25 символов, ширина ~340px */
+    @keyframes m3 {
+      0%, 35% { width: 0; animation-timing-function: steps(25, end); }
+      47%, 92% { width: 340px; }
+      95%, 100% { width: 0; }
+    }
+    @keyframes c3 {
+      0%, 34.9% { opacity: 0; transform: translateX(0); }
+      35% { opacity: 1; transform: translateX(0); animation-timing-function: steps(25, end); }
+      46.9% { opacity: 1; transform: translateX(340px); }
+      47%, 100% { opacity: 0; transform: translateX(340px); }
+    }
+
+    /* 4. Строка 4 (47% -> 59%): 26 символов, ширина ~355px */
+    @keyframes m4 {
+      0%, 47% { width: 0; animation-timing-function: steps(26, end); }
+      59%, 92% { width: 355px; }
+      95%, 100% { width: 0; }
+    }
+    @keyframes c4 {
+      0%, 46.9% { opacity: 0; transform: translateX(0); }
+      47% { opacity: 1; transform: translateX(0); animation-timing-function: steps(26, end); }
+      58.9% { opacity: 1; transform: translateX(355px); }
+      59%, 100% { opacity: 0; transform: translateX(355px); }
+    }
+
+    /* 5. Строка 5 (59% -> 76%): 47 символов, ширина ~640px + мигание до 92% */
+    @keyframes m5 {
+      0%, 59% { width: 0; animation-timing-function: steps(47, end); }
+      76%, 92% { width: 640px; }
+      95%, 100% { width: 0; }
+    }
+    @keyframes c5 {
+      0%, 58.9% { transform: translateX(-999px); }
+      59% { transform: translateX(0); animation-timing-function: steps(47, end); }
+      76%, 92% { transform: translateX(640px); }
+      92.1%, 100% { transform: translateX(-999px); }
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+  </style>
+
+  <!-- Черный фон -->
+  <rect width="850" height="290" rx="14" class="bg" />
+
+  <!-- 1. Заголовок: 👋 Hey, I'm Qwarwin + бегущий курсор -->
+  <text x="50" y="68" class="emoji">👋</text>
+  <g clip-path="url(#type-line-1)">
+    <text x="140" y="70" class="title">Hey, I'm Qwarwin</text>
+  </g>
+  <rect x="142" y="64" width="28" height="6" rx="2" class="cursor cur-1" />
+
+  <!-- 2. Подзаголовок: Developer • Designer • Tech Enthusiast + бегущий курсор -->
+  <g clip-path="url(#type-line-2)">
+    <text x="50" y="122" class="subtitle">
+      Developer <tspan class="dot">•</tspan> Designer <tspan class="dot">•</tspan> Tech Enthusiast
+    </text>
+  </g>
+  <rect x="52" y="119" width="16" height="4" rx="1.5" class="cursor cur-2" />
+
+  <!-- 3. Неоновые линии -->
+  <rect x="50" y="147" width="750" height="3.5" fill="url(#line-grad)" filter="url(#soft-glow)" class="fade-line" />
+  <rect x="50" y="172" width="6.5" height="84" fill="#24e500" filter="url(#soft-glow)" class="fade-line" />
+
+  <!-- 4. Три строки описания + бегущий и мигающий в конце курсор -->
+  <g clip-path="url(#type-line-3)">
+    <text x="76" y="190" class="bio">I build things that work,</text>
+  </g>
+  <rect x="78" y="187" width="14" height="3.5" rx="1" class="cursor cur-3" />
+
+  <g clip-path="url(#type-line-4)">
+    <text x="76" y="220" class="bio">break things to learn, and</text>
+  </g>
+  <rect x="78" y="217" width="14" height="3.5" rx="1" class="cursor cur-4" />
+
+  <g clip-path="url(#type-line-5)">
+    <text x="76" y="250" class="bio">occasionally make stuff that looks decent too.</text>
+  </g>
+  <rect x="78" y="247" width="14" height="3.5" rx="1" class="cursor cur-5" />
+</svg>
