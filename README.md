@@ -1,10 +1,21 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&height=200&color=0:9d7cff,100:58a6ff&text=Qwarwin&fontColor=ffffff&fontSize=60&fontAlignY=38&desc=Developer%20%C2%B7%20Designer%20%C2%B7%20Tech%20Enthusiast&descSize=18&descAlignY=60&animation=fadeIn" width="100%" alt="Qwarwin banner" />
+<img src="https://capsule-render.vercel.app/api?type=waving&height=240&color=0:9d7cff,100:58a6ff&text=Qwarwin&fontColor=ffffff&fontSize=64&fontAlignY=38&desc=Developer%20%C2%B7%20Designer%20%C2%B7%20Tech%20Enthusiast&descSize=18&descAlignY=58&animation=twinkling" width="100%" alt="Qwarwin banner" />
 
 <a href="https://github.com/Qwarwin4">
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=500&size=20&duration=3500&pause=1000&color=9D7CFF&center=true&vCenter=true&width=520&lines=I+build+things+that+work;I+break+things+to+learn;And+sometimes+make+stuff+that+looks+decent" alt="Typing SVG" />
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=500&size=20&duration=3200&pause=900&color=9D7CFF&center=true&vCenter=true&width=560&height=40&lines=I+build+things+that+work;I+break+things+to+learn;And+sometimes+make+stuff+that+looks+decent;btw+I+use+Arch" alt="Typing SVG" />
 </a>
+
+<br/>
+
+```text
+qwarwin@arch
+────────────────────────────────────────
+role    developer · designer · tech enthusiast
+os      Arch Linux (btw) · Windows
+shell   bash · powershell
+mode    build things, break things, learn
+```
 
 </div>
 
@@ -47,8 +58,10 @@
 ## 📊 GitHub Stats
 
 <p align="center">
-  <img src="https://github-stats-xi-six.vercel.app/api/stats?user=Qwarwin4&theme=glass" alt="Qwarwin4 GitHub stats" />
+  <img src="https://github-profiles-insights.vercel.app/api/insight?username=Qwarwin4&theme=tokyonight" alt="Qwarwin4 GitHub stats and top languages" />
 </p>
+
+---
 
 ## 📬 Find me here
 
