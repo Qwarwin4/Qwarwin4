@@ -42,10 +42,16 @@ I build things that work, break things to learn, and occasionally make stuff tha
 
 ## 📊 Github Stats
 
-<p align="center">
-  <img height="195" src="https://github-readme-stats-eight-theta.vercel.app/api?username=Qwarwin4&show_icons=true&bg_color=000000&title_color=39ff14&text_color=00ff41&icon_color=39ff14&border_color=00ff41" />
-  <img height="195" src="https://github-readme-stats-eight-theta.vercel.app/api/top-langs/?username=Qwarwin4&layout=compact&bg_color=000000&title_color=39ff14&text_color=00ff41&border_color=00ff41" />
-</p>
+<table align="center" border="0">
+  <tr>
+    <td align="center">
+      <img width="400" src="https://github-readme-stats-eight-theta.vercel.app/api?username=Qwarwin4&show_icons=true&bg_color=000000&title_color=39ff14&text_color=00ff41&icon_color=39ff14&border_color=00ff41" />
+    </td>
+    <td align="center">
+      <img width="330" src="https://github-readme-stats-eight-theta.vercel.app/api/top-langs/?username=Qwarwin4&layout=compact&bg_color=000000&title_color=39ff14&text_color=00ff41&border_color=00ff41" />
+    </td>
+  </tr>
+</table>
 
 ## 📬 Find me here
 
