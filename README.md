@@ -1,44 +1,56 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&height=160&color=0:090014,30:25105A,70:3156A8,100:00C9FF&text=Qwarwin&fontColor=ffffff&fontSize=64&fontAlignY=42&desc=CODE%20%E2%80%A2%20CREATE%20%E2%80%A2%20INNOVATE&descSize=15&descAlignY=65&animation=twinkling" width="100%" />
+# 👋 Hey, I'm Qwarwin
 
-<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=500&size=15&duration=3000&pause=1000&color=9D7CFF&center=true&vCenter=true&width=600&height=35&lines=I+build+things+that+work;I+break+things+to+learn;And+sometimes+make+stuff+that+looks+decent" alt="Typing SVG" />
+### Developer · Designer · Tech Enthusiast
 
-</div>
+I build things that work, break things to learn, and occasionally make stuff that looks decent too.
 
-## 🛠️ Tech Stack
+---
 
-<div align="center">
+## 🛠️ Stuff I work with
 
-<img src="https://skillicons.dev/icons?i=arch,linux,windows,cpp,cs,rust,haskell,java,dart,python,nodejs,html,css,sqlite,git,github,docker,railway,heroku,ae,krita,canva,gimp,bash,powershell&theme=dark" />
+![Arch Linux](https://img.shields.io/badge/Arch_Linux-1793D1?style=for-the-badge&logo=arch-linux&logoColor=white)
+![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)
+![Windows](https://img.shields.io/badge/Windows-0078D4?style=for-the-badge&logo=windows11&logoColor=white)
+![C++](https://img.shields.io/badge/c++-%2300599C.svg?logo=c%2B%2B&logoColor=white&style=for-the-badge)
+![C#](https://img.shields.io/badge/c%23-%23239120.svg?logo=c-sharp&logoColor=white&style=for-the-badge)
+![Rust](https://img.shields.io/badge/Rust-000000?style=for-the-badge&logo=rust&logoColor=white)
+![Haskell](https://img.shields.io/badge/Haskell-5e5086?logo=haskell&logoColor=white&style=for-the-badge)
+![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
+![Dart](https://img.shields.io/badge/Dart-0175C2?style=for-the-badge&logo=dart&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+![SQLite](https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white)
+![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
+![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![Railway](https://img.shields.io/badge/Railway-0B0D0E?style=for-the-badge&logo=railway&logoColor=white)
+![Heroku](https://img.shields.io/badge/Heroku-430098?style=for-the-badge&logo=heroku&logoColor=white)
+![Cisco](https://img.shields.io/badge/Cisco-1BA0D7?style=for-the-badge&logo=cisco&logoColor=white)
+![Adobe After Effects](https://img.shields.io/badge/After%20Effects-9999FF?style=for-the-badge&logo=adobeaftereffects&logoColor=white)
+![Krita](https://img.shields.io/badge/Krita-3BABFF?style=for-the-badge&logo=krita&logoColor=white)
+![Canva](https://img.shields.io/badge/Canva-00C4CC?style=for-the-badge&logo=canva&logoColor=white)
+![GIMP](https://img.shields.io/badge/GIMP-5C5543?style=for-the-badge&logo=gimp&logoColor=white)
+![Windows Terminal](https://img.shields.io/badge/Windows%20Terminal-4D4D4D?style=for-the-badge&logo=windowsterminal&logoColor=white)
+![Bash](https://img.shields.io/badge/Bash-4EAA25?style=for-the-badge&logo=gnubash&logoColor=white)
+![PowerShell](https://img.shields.io/badge/PowerShell-5391FE?style=for-the-badge&logo=powershell&logoColor=white)
 
-<img src="https://img.shields.io/badge/Cisco-16181C?style=for-the-badge&logo=cisco&logoColor=58A6FF" />
-<img src="https://img.shields.io/badge/Windows%20Terminal-16181C?style=for-the-badge&logo=windowsterminal&logoColor=9D7CFF" />
+---
 
-</div>
+## 📊 Github Stats
 
-## 📊 GitHub Stats
+<p align="center"><img width="49%" src="https://github-readme-stats-eight-theta.vercel.app/api?username=Qwarwin4&show_icons=true&theme=radical&hide_border=true&card_width=450" /> <img width="49%" src="https://github-readme-stats-eight-theta.vercel.app/api/top-langs/?username=Qwarwin4&langs_count=4&theme=radical&hide_border=true&card_width=450" /></p>
 
-<div align="center">
+## 📬 Find me here
 
-<img src="./images/userstats.svg" width="100%" alt="GitHub Stats and Languages" />
-
-</div>
-
-## 🌐 Find me here
-
-<div align="center">
-
-<a href="https://github.com/Qwarwin4"><img src="https://img.shields.io/badge/GitHub-0B1020?style=for-the-badge&logo=github&logoColor=ffffff" /></a>&nbsp;
-<a href="https://t.me/qwarwin4git"><img src="https://img.shields.io/badge/Telegram-0B1020?style=for-the-badge&logo=telegram&logoColor=58A6FF" /></a>
-
-<a href="https://discord.gg/ycmhfnmCqh"><img src="https://img.shields.io/badge/Discord-0B1020?style=for-the-badge&logo=discord&logoColor=9D7CFF" /></a>&nbsp;
-<a href="mailto:qwarwin@gmail.com"><img src="https://img.shields.io/badge/Email-0B1020?style=for-the-badge&logo=gmail&logoColor=58A6FF" /></a>
-
-</div>
-
-<div align="center">
-
-<img src="https://capsule-render.vercel.app/api?type=waving&height=100&color=0:00C9FF,40:3156A8,75:25105A,100:090014&section=footer" width="100%" />
+<p align="center">
+  <a href="https://github.com/Qwarwin4"><img src="https://img.shields.io/badge/GitHub-Follow-2d333b?style=for-the-badge&logo=github&logoColor=white&labelColor=1b1f24" height="40" alt="GitHub: follow"></a>
+  <a href="https://discord.gg/ycmhfnmCqh"><img src="https://img.shields.io/badge/Discord-Join_server-5865F2?style=for-the-badge&labelColor=1b1f24&logo=discord&logoColor=white" height="40" alt="Discord: join the server"></a>
+  <a href="https://t.me/qwarwin4git"><img src="https://img.shields.io/badge/Telegram-Follow-26A5E4?style=for-the-badge&logo=telegram&logoColor=white&labelColor=1b1f24" height="40" alt="Telegram: follow the channel"></a>
+  <a href="mailto:qwarwin@gmail.com"><img src="https://img.shields.io/badge/Gmail-Contact-EA4335?style=for-the-badge&logo=gmail&logoColor=white&labelColor=1b1f24" height="40" alt="Gmail: contact"></a>
+</p>
 
 </div>
