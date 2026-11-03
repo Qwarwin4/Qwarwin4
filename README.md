@@ -43,12 +43,7 @@ I build things that work, break things to learn, and occasionally make stuff tha
 ## 📊 Github Stats
 
 <p align="center">
-  <table border="0" cellpadding="0" cellspacing="0">
-    <tr valign="middle">
-      <td><img height="180" src="https://github-readme-stats-eight-theta.vercel.app/api?username=Qwarwin4&show_icons=true&theme=radical&hide_border=true" /></td>
-      <td><img height="180" src="https://github-readme-stats-eight-theta.vercel.app/api/top-langs/?username=Qwarwin4&layout=compact&theme=radical&hide_border=true&card_width=420" /></td>
-    </tr>
-  </table>
+  <img src="https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=Qwarwin4&theme=radical" />
 </p>
 
 ## 📬 Find me here
