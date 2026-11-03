@@ -1,15 +1,7 @@
-<div align="center">
-
-# 👋 Hey, I'm Qwarwin
-
-### Developer · Designer · Tech Enthusiast
-
+👋 Hey, I'm Qwarwin
+Developer · Designer · Tech Enthusiast
 I build things that work, break things to learn, and occasionally make stuff that looks decent too.
-
----
-
-## 🛠️ Stuff I work with
-
+🛠️ Stuff I work with
 ![Arch Linux](https://img.shields.io/badge/Arch_Linux-1793D1?style=for-the-badge&logo=arch-linux&logoColor=white)
 ![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)
 ![Windows](https://img.shields.io/badge/Windows-0078D4?style=for-the-badge&logo=windows11&logoColor=white)
@@ -37,20 +29,13 @@ I build things that work, break things to learn, and occasionally make stuff tha
 ![Windows Terminal](https://img.shields.io/badge/Windows%20Terminal-4D4D4D?style=for-the-badge&logo=windowsterminal&logoColor=white)
 ![Bash](https://img.shields.io/badge/Bash-4EAA25?style=for-the-badge&logo=gnubash&logoColor=white)
 ![PowerShell](https://img.shields.io/badge/PowerShell-5391FE?style=for-the-badge&logo=powershell&logoColor=white)
-
----
-
-## 📊 Github Stats
-
+📊 Github Stats
 <p align="center"><img width="49%" src="https://github-readme-stats-eight-theta.vercel.app/api?username=Qwarwin4&show_icons=true&theme=radical&hide_border=true&card_width=450" /> <img width="49%" src="https://github-readme-stats-eight-theta.vercel.app/api/top-langs/?username=Qwarwin4&langs_count=4&theme=radical&hide_border=true&card_width=450" /></p>
-
-## 📬 Find me here
-
+📬 Find me here
 <p align="center">
   <a href="https://github.com/Qwarwin4"><img src="https://img.shields.io/badge/GitHub-Follow-2d333b?style=for-the-badge&logo=github&logoColor=white&labelColor=1b1f24" height="40" alt="GitHub: follow"></a>
   <a href="https://discord.gg/ycmhfnmCqh"><img src="https://img.shields.io/badge/Discord-Join_server-5865F2?style=for-the-badge&labelColor=1b1f24&logo=discord&logoColor=white" height="40" alt="Discord: join the server"></a>
   <a href="https://t.me/qwarwin4git"><img src="https://img.shields.io/badge/Telegram-Follow-26A5E4?style=for-the-badge&logo=telegram&logoColor=white&labelColor=1b1f24" height="40" alt="Telegram: follow the channel"></a>
   <a href="mailto:qwarwin@gmail.com"><img src="https://img.shields.io/badge/Gmail-Contact-EA4335?style=for-the-badge&logo=gmail&logoColor=white&labelColor=1b1f24" height="40" alt="Gmail: contact"></a>
 </p>
-
 </div>
