@@ -46,7 +46,9 @@
 
 ## 📊 GitHub Stats
 
-<p align="center"><img width="49%" src="https://github-readme-stats-eight-theta.vercel.app/api?username=Qwarwin4&show_icons=true&hide_border=true&include_all_commits=true&count_private=true&rank_icon=github&border_radius=16&bg_color=0d1117&title_color=9d7cff&icon_color=58a6ff&text_color=c9d1d9&ring_color=9d7cff&card_width=450&cache_seconds=1800" alt="Qwarwin4 GitHub stats" /> <img width="49%" src="https://github-readme-stats-eight-theta.vercel.app/api/top-langs/?username=Qwarwin4&layout=compact&langs_count=6&hide_border=true&border_radius=16&bg_color=0d1117&title_color=9d7cff&text_color=c9d1d9&card_width=450&cache_seconds=1800" alt="Qwarwin4 top languages" /></p>
+<p align="center">
+  <img src="https://github-profiles-insights.vercel.app/api/insight?username=Qwarwin4&theme=tokyonight&profile=false&header=false&summary=false&streak=false&graph=false&stats=true&languages=true" alt="Qwarwin4 GitHub stats and top languages" />
+</p>
 
 ---
 
