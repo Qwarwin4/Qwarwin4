@@ -1,7 +1,7 @@
 <div align="center">
 
 <p align="center">
-  <img src="./assets/header.svg" width="75%" alt="Header" />
+  <img src="./assets/header.svg" width="80%" alt="Header" />
 </p>
 
 ---
@@ -28,12 +28,10 @@
 ![Bash](https://skillicons.dev/icons?i=bash)
 ![PowerShell](https://skillicons.dev/icons?i=powershell)
 
----
-
 ## 📊 Github Stats
 
 <p align="center">
-  <img src="./assets/stats.svg" width="75%" alt="GitHub Stats" />
+  <img src="./assets/stats.svg" width="80%" alt="GitHub Stats" />
 </p>
 
 ## 📬 Find me here
