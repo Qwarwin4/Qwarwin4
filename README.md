@@ -42,7 +42,8 @@ I build things that work, break things to learn, and occasionally make stuff tha
 
 ## 📊 Github Stats
 
-[![Trophy](https://github-profile-trophy.vercel.app/?username=Qwarwin4&theme=flat&no-frame=true)](https://github.com/ryo-ma/github-profile-trophy)
+![GitHub Stats](https://github-readme-stats-eight-theta.vercel.app/api?username=Qwarwin4&show_icons=true&theme=radical)
+![Top Langs](https://github-readme-stats-eight-theta.vercel.app/api/top-langs/?username=Qwarwin4&layout=compact&theme=radical)
 
 ## 📬 Find me here
 
