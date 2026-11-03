@@ -1,6 +1,10 @@
 <div align="center">
 
-# 👋 Hey, I'm Qwarwin
+<p align="center">
+  <a href="https://git.io/typing-svg">
+    <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=25&duration=3000&pause=1000&color=A78BFA&center=true&vCenter=true&width=650&lines=Developer+%C2%B7+Designer+%C2%B7+Tech+Stack;Building+things+with+code+%E2%9C%A8;Always+learning+something+new+%F0%9F%9A%80" alt="Typing SVG"/>
+  </a>
+</p>
 
 ### Developer · Designer · Tech Enthusiast
 
