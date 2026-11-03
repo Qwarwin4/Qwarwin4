@@ -1,6 +1,8 @@
-👋 Hey, I'm Qwarwin
+## 👋 Hey, I'm Qwarwin
 Developer · Designer · Tech Enthusiast
 I build things that work, break things to learn, and occasionally make stuff that looks decent too.
+
+
 🛠️ Stuff I work with
 ![Arch Linux](https://img.shields.io/badge/Arch_Linux-1793D1?style=for-the-badge&logo=arch-linux&logoColor=white)
 ![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)
