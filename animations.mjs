@@ -19,6 +19,7 @@ query($login: String!, $from: DateTime!) {
     repositories(first: 100, ownerAffiliations: OWNER, isFork: false, privacy: PUBLIC) {
       totalCount
       nodes {
+        name
         stargazerCount
         languages(first: 10, orderBy: {field: SIZE, direction: DESC}) {
           edges {
@@ -27,6 +28,9 @@ query($login: String!, $from: DateTime!) {
           }
         }
       }
+    }
+    skippedForks: repositories(ownerAffiliations: OWNER, isFork: true, privacy: PUBLIC) {
+      nodes { name primaryLanguage { name } }
     }
     contributionsCollection(from: $from) {
       totalCommitContributions
@@ -67,6 +71,17 @@ const prs = user.pullRequests.totalCount;
 const issues = user.openIssues.totalCount + user.closedIssues.totalCount;
 const contributedTo = user.contributionsCollection.totalRepositoriesWithContributedCommits;
 
+console.log(`публичных репозиториев учтено: ${user.repositories.nodes.length}`);
+for (const repo of user.repositories.nodes) {
+  const langs = repo.languages.edges.map((e) => `${e.node.name} ${e.size}`).join(', ') || '-';
+  console.log(`  ${repo.name}: ${langs}`);
+}
+const forks = user.skippedForks.nodes;
+if (forks.length) {
+  const list = forks.map((f) => `${f.name} (${f.primaryLanguage ? f.primaryLanguage.name : '-'})`).join(', ');
+  console.log(`форки в статистику не входят: ${list}`);
+}
+
 const expCdf = (x) => 1 - Math.pow(2, -x);
 const logNormalCdf = (x) => x / (1 + x);
 
@@ -105,6 +120,8 @@ const topLangs = [...langMap.entries()]
   .map(([name, data]) => ({ name, color: data.color, size: data.size }))
   .sort((a, b) => b.size - a.size)
   .slice(0, 5);
+
+console.log('топ языков по байтам: ' + topLangs.map((l) => `${l.name} ${l.size}`).join(', '));
 
 const top5Total = topLangs.reduce((acc, l) => acc + l.size, 0) || 1;
 topLangs.forEach((l) => {
