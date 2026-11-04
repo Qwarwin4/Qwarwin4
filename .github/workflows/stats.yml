@@ -26,6 +26,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_USERNAME: ${{ github.repository_owner }}
+          INCLUDE_FORKS: 'true'
         run: node animations.mjs
 
       - name: Commit and Push updated SVG

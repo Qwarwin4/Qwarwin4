@@ -3,6 +3,8 @@ import path from 'path';
 
 const USERNAME = process.env.GH_USERNAME || 'Qwarwin4';
 const TOKEN = process.env.GH_TOKEN;
+const INCLUDE_FORKS = process.env.INCLUDE_FORKS === 'true';
+const LANG_SLOTS = 6;
 
 if (!TOKEN) {
   console.error('Ошибка: не задан GH_TOKEN');
@@ -16,7 +18,7 @@ const query = `
 query($login: String!, $from: DateTime!) {
   user(login: $login) {
     followers { totalCount }
-    repositories(first: 100, ownerAffiliations: OWNER, isFork: false, privacy: PUBLIC) {
+    repositories(first: 100, ownerAffiliations: OWNER, ${INCLUDE_FORKS ? '' : 'isFork: false,'} privacy: PUBLIC) {
       totalCount
       nodes {
         name
@@ -77,7 +79,7 @@ for (const repo of user.repositories.nodes) {
   console.log(`  ${repo.name}: ${langs}`);
 }
 const forks = user.skippedForks.nodes;
-if (forks.length) {
+if (!INCLUDE_FORKS && forks.length) {
   const list = forks.map((f) => `${f.name} (${f.primaryLanguage ? f.primaryLanguage.name : '-'})`).join(', ');
   console.log(`форки в статистику не входят: ${list}`);
 }
@@ -119,7 +121,7 @@ for (const repo of user.repositories.nodes) {
 const topLangs = [...langMap.entries()]
   .map(([name, data]) => ({ name, color: data.color, size: data.size }))
   .sort((a, b) => b.size - a.size)
-  .slice(0, 5);
+  .slice(0, LANG_SLOTS);
 
 console.log('топ языков по байтам: ' + topLangs.map((l) => `${l.name} ${l.size}`).join(', '));
 
@@ -145,7 +147,7 @@ const langRow = (l, idx, n) => `
     </g>`;
 
 const leftCol = topLangs.slice(0, 3).map((l, i) => langRow(l, i, 0)).join('');
-const rightCol = topLangs.slice(3, 5).map((l, i) => langRow(l, i, 3)).join('');
+const rightCol = topLangs.slice(3, LANG_SLOTS).map((l, i) => langRow(l, i, 3)).join('');
 
 const svg = `<svg width="800" height="520" viewBox="0 0 800 520" fill="none" xmlns="http://www.w3.org/2000/svg">
   <style>
