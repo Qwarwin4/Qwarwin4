@@ -1,10 +1,11 @@
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 
 const USERNAME = process.env.GH_USERNAME || 'Qwarwin4';
 const TOKEN = process.env.GH_TOKEN;
 const INCLUDE_FORKS = process.env.INCLUDE_FORKS === 'true';
-const LANG_SLOTS = 6;
+const LANGUAGE_SLOTS = 12;
+const GRAPHQL_URL = 'https://api.github.com/graphql';
 
 if (!TOKEN) {
   console.error('Ошибка: не задан GH_TOKEN');
@@ -13,26 +14,20 @@ if (!TOKEN) {
 
 const currentYear = new Date().getFullYear();
 const fromDate = `${currentYear}-01-01T00:00:00Z`;
-
+const forkFilter = INCLUDE_FORKS ? '' : 'isFork: false,';
 const query = `
-query($login: String!, $from: DateTime!) {
+query($login: String!, $from: DateTime!, $cursor: String) {
   user(login: $login) {
     followers { totalCount }
-    repositories(first: 100, ownerAffiliations: OWNER, ${INCLUDE_FORKS ? '' : 'isFork: false,'} privacy: PUBLIC) {
+    repositories(first: 100, after: $cursor, ownerAffiliations: OWNER, ${forkFilter} privacy: PUBLIC) {
       totalCount
+      pageInfo { hasNextPage endCursor }
       nodes {
-        name
         stargazerCount
-        languages(first: 10, orderBy: {field: SIZE, direction: DESC}) {
-          edges {
-            size
-            node { name color }
-          }
+        languages(first: 100, orderBy: {field: SIZE, direction: DESC}) {
+          edges { size node { name color } }
         }
       }
-    }
-    skippedForks: repositories(ownerAffiliations: OWNER, isFork: true, privacy: PUBLIC) {
-      nodes { name primaryLanguage { name } }
     }
     contributionsCollection(from: $from) {
       totalCommitContributions
@@ -40,224 +35,123 @@ query($login: String!, $from: DateTime!) {
       totalRepositoriesWithContributedCommits
     }
     pullRequests(first: 1) { totalCount }
-    openIssues: issues(states: OPEN) { totalCount }
-    closedIssues: issues(states: CLOSED) { totalCount }
+    openIssues: issues(first: 1, states: OPEN) { totalCount }
+    closedIssues: issues(first: 1, states: CLOSED) { totalCount }
   }
 }
 `;
 
-const res = await fetch('https://api.github.com/graphql', {
-  method: 'POST',
-  headers: {
-    Authorization: `Bearer ${TOKEN}`,
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify({ query, variables: { login: USERNAME, from: fromDate } }),
-});
+async function getStats() {
+  let cursor = null;
+  let totalRepos = 0;
+  let totalStars = 0;
+  let followers = 0;
+  let commits = 0;
+  let prs = 0;
+  let issues = 0;
+  let contributedTo = 0;
+  const languages = new Map();
 
-const json = await res.json();
-if (json.errors) {
-  console.error(json.errors);
-  process.exit(1);
+  do {
+    const response = await fetch(GRAPHQL_URL, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${TOKEN}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ query, variables: { login: USERNAME, from: fromDate, cursor } }),
+    });
+    const result = await response.json();
+    if (!response.ok || result.errors || !result.data?.user) {
+      console.error('Ошибка GitHub GraphQL API:', result.errors || result.message || response.statusText);
+      process.exit(1);
+    }
+
+    const user = result.data.user;
+    const repositories = user.repositories;
+    totalRepos = repositories.totalCount;
+    totalStars += repositories.nodes.reduce((sum, repo) => sum + repo.stargazerCount, 0);
+    for (const repo of repositories.nodes) {
+      for (const { size, node } of repo.languages.edges) {
+        const existing = languages.get(node.name) || { size: 0, color: node.color || '#24e500' };
+        existing.size += size;
+        languages.set(node.name, existing);
+      }
+    }
+    if (cursor === null) {
+      followers = user.followers.totalCount;
+      commits = user.contributionsCollection.totalCommitContributions + user.contributionsCollection.restrictedContributionsCount;
+      prs = user.pullRequests.totalCount;
+      issues = user.openIssues.totalCount + user.closedIssues.totalCount;
+      contributedTo = user.contributionsCollection.totalRepositoriesWithContributedCommits;
+    }
+    cursor = repositories.pageInfo.hasNextPage ? repositories.pageInfo.endCursor : null;
+  } while (cursor);
+
+  return { totalRepos, totalStars, followers, commits, prs, issues, contributedTo, languages };
 }
 
-const user = json.data.user;
-const publicRepos = user.repositories.totalCount;
-const followers = user.followers.totalCount;
-const totalStars = user.repositories.nodes.reduce((acc, r) => acc + r.stargazerCount, 0);
-
-const commits =
-  user.contributionsCollection.totalCommitContributions +
-  user.contributionsCollection.restrictedContributionsCount;
-const prs = user.pullRequests.totalCount;
-const issues = user.openIssues.totalCount + user.closedIssues.totalCount;
-const contributedTo = user.contributionsCollection.totalRepositoriesWithContributedCommits;
-
-console.log(`публичных репозиториев учтено: ${user.repositories.nodes.length}`);
-for (const repo of user.repositories.nodes) {
-  const langs = repo.languages.edges.map((e) => `${e.node.name} ${e.size}`).join(', ') || '-';
-  console.log(`  ${repo.name}: ${langs}`);
-}
-const forks = user.skippedForks.nodes;
-if (!INCLUDE_FORKS && forks.length) {
-  const list = forks.map((f) => `${f.name} (${f.primaryLanguage ? f.primaryLanguage.name : '-'})`).join(', ');
-  console.log(`форки в статистику не входят: ${list}`);
+function escapeXml(value) {
+  return String(value).replace(/[&<>"']/g, (char) => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&apos;',
+  })[char]);
 }
 
-const expCdf = (x) => 1 - Math.pow(2, -x);
-const logNormalCdf = (x) => x / (1 + x);
+const stats = await getStats();
+const { totalRepos, totalStars, followers, commits, prs, issues, contributedTo } = stats;
+const allLanguageBytes = [...stats.languages.values()].reduce((sum, language) => sum + language.size, 0) || 1;
+const topLanguages = [...stats.languages.entries()]
+  .map(([name, data]) => ({ name, size: data.size, color: /^#[0-9a-f]{6}$/i.test(data.color || '') ? data.color : '#24e500' }))
+  .sort((a, b) => b.size - a.size)
+  .slice(0, LANGUAGE_SLOTS);
 
-const COMP_WEIGHT = 2 * expCdf(commits / 250) +
-                    3 * expCdf(prs / 50) +
-                    1 * expCdf(issues / 25) +
-                    4 * logNormalCdf(totalStars / 50) +
-                    1 * logNormalCdf(followers / 10);
+console.log(`Публичных репозиториев учтено: ${totalRepos}`);
+console.log(`Топ языков: ${topLanguages.map(({ name, size }) => `${name} ${size}`).join(', ') || 'нет данных'}`);
 
-const percentile = 100 - (COMP_WEIGHT / 11) * 100;
-
+const expCdf = (value) => 1 - Math.pow(2, -value);
+const logCdf = (value) => value / (1 + value);
+const weightedScore = 2 * expCdf(commits / 250) + 3 * expCdf(prs / 50) + expCdf(issues / 25) +
+  4 * logCdf(totalStars / 50) + logCdf(followers / 10);
+const score = Math.round((weightedScore / 11) * 100);
 let rank = 'C';
-if (percentile <= 1) rank = 'S';
-else if (percentile <= 12.5) rank = 'A+';
-else if (percentile <= 25) rank = 'A';
-else if (percentile <= 37.5) rank = 'A-';
-else if (percentile <= 50) rank = 'B+';
-else if (percentile <= 62.5) rank = 'B';
-else if (percentile <= 75) rank = 'B-';
-else if (percentile <= 87.5) rank = 'C+';
+if (score >= 99) rank = 'S';
+else if (score >= 87.5) rank = 'A+';
+else if (score >= 75) rank = 'A';
+else if (score >= 62.5) rank = 'A-';
+else if (score >= 50) rank = 'B+';
+else if (score >= 37.5) rank = 'B';
+else if (score >= 25) rank = 'B-';
+else if (score >= 12.5) rank = 'C+';
 
 const circumference = 2 * Math.PI * 46;
-const progress = ((100 - percentile) / 100) * circumference;
+const progress = score / 100 * circumference;
+const barWidth = 744;
+let barX = 28;
+const languageBars = topLanguages.map((language) => {
+  const width = language.size / allLanguageBytes * barWidth;
+  const rect = `<rect x="${barX.toFixed(2)}" y="408" width="${width.toFixed(2)}" height="12" fill="${language.color}"/>`;
+  barX += width;
+  return rect;
+}).join('\n    ');
+const languageRow = (language, index) => {
+  const x = index < 6 ? 28 : 410;
+  const row = index % 6;
+  const percent = (language.size / allLanguageBytes * 100).toFixed(1);
+  return `<g class="fade" style="animation-delay:${(1.05 + index * 0.08).toFixed(2)}s"><circle cx="${x}" cy="${448 + row * 22}" r="5" fill="${language.color}"/><text x="${x + 14}" y="${453 + row * 22}" class="lang-text">${escapeXml(language.name)} ${percent}%</text></g>`;
+};
+const leftLanguages = topLanguages.slice(0, 6).map(languageRow).join('\n');
+const rightLanguages = topLanguages.slice(6).map((language, index) => languageRow(language, index + 6)).join('\n');
 
-const langMap = new Map();
-for (const repo of user.repositories.nodes) {
-  for (const edge of repo.languages.edges) {
-    const { name, color } = edge.node;
-    const prev = langMap.get(name) || { size: 0, color: color || '#24e500' };
-    prev.size += edge.size;
-    langMap.set(name, prev);
-  }
-}
-
-const topLangs = [...langMap.entries()]
-  .map(([name, data]) => ({ name, color: data.color, size: data.size }))
-  .sort((a, b) => b.size - a.size)
-  .slice(0, LANG_SLOTS);
-
-console.log('топ языков по байтам: ' + topLangs.map((l) => `${l.name} ${l.size}`).join(', '));
-
-const top5Total = topLangs.reduce((acc, l) => acc + l.size, 0) || 1;
-topLangs.forEach((l) => {
-  l.pct = ((l.size / top5Total) * 100).toFixed(2);
-  l.width = (l.size / top5Total) * 744;
-});
-
-let currentX = 28;
-const barRects = topLangs
-  .map((l) => {
-    const rect = `<rect x="${currentX.toFixed(1)}" y="382" width="${l.width.toFixed(1)}" height="12" fill="${l.color}"/>`;
-    currentX += l.width;
-    return rect;
-  })
-  .join('\n    ');
-
-const langRow = (l, idx, n) => `
-    <g class="fade" style="animation-delay: ${(1.2 + (n + idx) * 0.12).toFixed(2)}s">
-      <circle cx="6" cy="${-5 + idx * 28}" r="6" fill="${l.color}"/>
-      <text x="22" y="${idx * 28}" class="lang-text">${l.name} ${l.pct}%</text>
-    </g>`;
-
-const leftCol = topLangs.slice(0, 3).map((l, i) => langRow(l, i, 0)).join('');
-const rightCol = topLangs.slice(3, LANG_SLOTS).map((l, i) => langRow(l, i, 3)).join('');
-
-const svg = `<svg width="800" height="520" viewBox="0 0 800 520" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <style>
-    .title { font: 600 22px 'Segoe UI', Ubuntu, Sans-Serif; fill: #24e500; }
-    .section-title { font: 700 18px 'Segoe UI', Ubuntu, Sans-Serif; fill: #24e500; }
-    .metric-label { font: 400 13px 'Segoe UI', Ubuntu, Sans-Serif; fill: #8b949e; }
-    .metric-value { font: 700 28px 'Segoe UI', Ubuntu, Sans-Serif; fill: #24e500; }
-    .stat-label { font: 600 14px 'Segoe UI', Ubuntu, Sans-Serif; fill: #e6edf3; }
-    .stat-value { font: 700 14px 'Segoe UI', Ubuntu, Sans-Serif; fill: #e6edf3; }
-    .rank-text { font: 700 30px 'Segoe UI', Ubuntu, Sans-Serif; fill: #ffffff; }
-    .lang-text { font: 400 14px 'Segoe UI', Ubuntu, Sans-Serif; fill: #e6edf3; }
-    .footer { font: 400 14px 'Segoe UI', Ubuntu, Sans-Serif; fill: #24e500; }
-    .divider { stroke: #1f6f12; stroke-width: 1; }
-
-    .fade { opacity: 0; animation: fade-in 0.7s ease-out forwards; }
-    .ring { stroke-dasharray: 0 289; animation: ring-fill 1.8s 0.5s cubic-bezier(.2,.7,.2,1) forwards; }
-    .rank-text { animation: rank-pulse 3s 2.5s ease-in-out infinite; }
-    .bar-reveal { width: 0; animation: bar-grow 1.5s 0.8s cubic-bezier(.2,.7,.2,1) forwards; }
-
-    @keyframes fade-in { to { opacity: 1; } }
-    @keyframes ring-fill { to { stroke-dasharray: ${progress.toFixed(1)} 289; } }
-    @keyframes bar-grow { to { width: 744px; } }
-    @keyframes rank-pulse { 50% { opacity: 0.6; } }
-  </style>
-
-  <defs>
-    <clipPath id="bar-clip">
-      <rect x="28" y="382" height="12" rx="6" class="bar-reveal"/>
-    </clipPath>
-  </defs>
-
-  <rect x="1" y="1" width="798" height="518" rx="18" fill="#070a0e" stroke="#24e500" stroke-width="1.5"/>
-
-  <text x="28" y="42" class="title fade">${USERNAME} · GitHub Stats</text>
-  <line x1="28" y1="60" x2="772" y2="60" class="divider"/>
-
-  <g class="fade" style="animation-delay: 0.10s">
-    <text x="28" y="92" class="metric-label">PUBLIC REPOSITORIES</text>
-    <text x="28" y="130" class="metric-value">${publicRepos}</text>
-  </g>
-
-  <g class="fade" style="animation-delay: 0.25s">
-    <text x="285" y="92" class="metric-label">TOTAL STARS</text>
-    <text x="285" y="130" class="metric-value">${totalStars}</text>
-  </g>
-
-  <g class="fade" style="animation-delay: 0.40s">
-    <text x="540" y="92" class="metric-label">FOLLOWERS</text>
-    <text x="540" y="130" class="metric-value">${followers}</text>
-  </g>
-
-  <line x1="28" y1="152" x2="772" y2="152" class="divider"/>
-
-  <g transform="translate(28, 174)">
-    <g class="fade" style="animation-delay: 0.40s" transform="translate(0, 0)">
-      <path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6[...]" fill="#24e500"/>
-      <text x="28" y="13" class="stat-label">Total Stars Earned:</text>
-      <text x="270" y="13" class="stat-value">${totalStars}</text>
-    </g>
-
-    <g class="fade" style="animation-delay: 0.52s" transform="translate(0, 30)">
-      <path d="M1.5 8a6.5 6.5 0 1 1 13 0 6.5 6.5 0 0 1-13 0ZM8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0Zm.5 4.75a.75.75 0 0 0-1.5 0v3.5a.75.75 0 0 0 .471.696l2.5 1a.75.75 0 0 0 .557-1.392L8.5 7.742V4.75Z" fill="#24e500"/>
-      <text x="28" y="13" class="stat-label">Total Commits (${currentYear}):</text>
-      <text x="270" y="13" class="stat-value">${commits}</text>
-    </g>
-
-    <g class="fade" style="animation-delay: 0.64s" transform="translate(0, 60)">
-      <path d="M1.5 3.25a2.25 2.25 0 1 1 3 2.122v5.256a2.251 2.251 0 1 1-1.5 0V5.372A2.25 2.25 0 0 1 1.5 3.25Zm5.677-.177L9.573.677A.25.25 0 0 1 10 .854V2.5h1A2.5 2.5 0 0 1 13.5 5v5.628a2.251 2.25" fill="#24e500"/>
-      <text x="28" y="13" class="stat-label">Total PRs:</text>
-      <text x="270" y="13" class="stat-value">${prs}</text>
-    </g>
-
-    <g class="fade" style="animation-delay: 0.76s" transform="translate(0, 90)">
-      <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z" fill="#24e500"/>
-      <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Z" fill="#24e500"/>
-      <text x="28" y="13" class="stat-label">Total Issues:</text>
-      <text x="270" y="13" class="stat-value">${issues}</text>
-    </g>
-
-    <g class="fade" style="animation-delay: 0.88s" transform="translate(0, 120)">
-      <path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm1" fill="#24e500"/>
-      <text x="28" y="13" class="stat-label">Contributed to (last year):</text>
-      <text x="270" y="13" class="stat-value">${contributedTo}</text>
-    </g>
-
-    <g transform="translate(560, 68)">
-      <circle cx="0" cy="0" r="46" stroke="#0f3809" stroke-width="7" fill="none"/>
-      <circle cx="0" cy="0" r="46" stroke="#24e500" stroke-width="7" class="ring" stroke-linecap="round" transform="rotate(-90)" fill="none"/>
-      <text x="0" y="11" text-anchor="middle" class="rank-text">${rank}</text>
-    </g>
-  </g>
-
-  <line x1="28" y1="330" x2="772" y2="330" class="divider"/>
-
-  <text x="28" y="364" class="section-title">Most Used Languages</text>
-
-  <g clip-path="url(#bar-clip)">
-    ${barRects}
-  </g>
-
-  <g transform="translate(28, 420)">${leftCol}
-  </g>
-
-  <g transform="translate(300, 420)">${rightCol}
-  </g>
-
-  <line x1="28" y1="484" x2="772" y2="484" class="divider"/>
-  <text x="28" y="506" class="footer fade" style="animation-delay: 1.8s">github.com/${USERNAME}</text>
-</svg>`;
+const svg = `<svg width="800" height="590" viewBox="0 0 800 590" fill="none" xmlns="http://www.w3.org/2000/svg">
+<style>
+.title{font:600 22px 'Segoe UI',Ubuntu,Sans-Serif;fill:#24e500}.section-title{font:700 18px 'Segoe UI',Ubuntu,Sans-Serif;fill:#24e500}.metric-label{font:400 13px 'Segoe UI',Ubuntu,Sans-Serif;fill:#8b949e}.metric-value{font:700 28px 'Segoe UI',Ubuntu,Sans-Serif;fill:#24e500}.stat-label{font:600 14px 'Segoe UI',Ubuntu,Sans-Serif;fill:#e6edf3}.stat-value{font:700 14px 'Segoe UI',Ubuntu,Sans-Serif;fill:#e6edf3}.rank-text{font:700 30px 'Segoe UI',Ubuntu,Sans-Serif;fill:#fff}.score-text{font:600 12px 'Segoe UI',Ubuntu,Sans-Serif;fill:#8b949e}.lang-text{font:400 13px 'Segoe UI',Ubuntu,Sans-Serif;fill:#e6edf3}.footer{font:400 13px 'Segoe UI',Ubuntu,Sans-Serif;fill:#24e500}.divider{stroke:#1f6f12;stroke-width:1}.fade{opacity:0;animation:fade-in .7s ease-out forwards}.ring{stroke-dasharray:0 ${circumference.toFixed(1)};animation:ring-fill 1.8s .4s cubic-bezier(.2,.7,.2,1) forwards}.rank-text{animation:rank-pulse 3s 2.5s ease-in-out infinite}.bar-reveal{width:0;animation:bar-grow 1.5s .7s cubic-bezier(.2,.7,.2,1) forwards}@keyframes fade-in{to{opacity:1}}@keyframes ring-fill{to{stroke-dasharray:${progress.toFixed(1)} ${circumference.toFixed(1)}}}@keyframes bar-grow{to{width:${barWidth}px}}@keyframes rank-pulse{50%{opacity:.6}}@media(prefers-reduced-motion:reduce){.fade,.ring,.rank-text,.bar-reveal{animation:none;opacity:1}}
+</style>
+<defs><clipPath id="bar-clip"><rect x="28" y="408" height="12" rx="6" class="bar-reveal"/></clipPath></defs>
+<rect x="1" y="1" width="798" height="588" rx="18" fill="#070a0e" stroke="#24e500" stroke-width="1.5"/><text x="28" y="42" class="title fade">${escapeXml(USERNAME)} · GitHub Stats</text><line x1="28" y1="60" x2="772" y2="60" class="divider"/>
+<g class="fade" style="animation-delay:.1s"><text x="28" y="92" class="metric-label">PUBLIC REPOSITORIES</text><text x="28" y="130" class="metric-value">${totalRepos}</text></g><g class="fade" style="animation-delay:.25s"><text x="285" y="92" class="metric-label">TOTAL STARS</text><text x="285" y="130" class="metric-value">${totalStars}</text></g><g class="fade" style="animation-delay:.4s"><text x="540" y="92" class="metric-label">FOLLOWERS</text><text x="540" y="130" class="metric-value">${followers}</text></g>
+<line x1="28" y1="152" x2="772" y2="152" class="divider"/><g transform="translate(28 174)"><g class="fade" style="animation-delay:.4s"><text y="13" class="stat-label">Total Stars Earned:</text><text x="245" y="13" class="stat-value">${totalStars}</text></g><g class="fade" style="animation-delay:.52s" transform="translate(0 30)"><text y="13" class="stat-label">Total Commits (${currentYear}):</text><text x="245" y="13" class="stat-value">${commits}</text></g><g class="fade" style="animation-delay:.64s" transform="translate(0 60)"><text y="13" class="stat-label">Total PRs:</text><text x="245" y="13" class="stat-value">${prs}</text></g><g class="fade" style="animation-delay:.76s" transform="translate(0 90)"><text y="13" class="stat-label">Total Issues:</text><text x="245" y="13" class="stat-value">${issues}</text></g><g class="fade" style="animation-delay:.88s" transform="translate(0 120)"><text y="13" class="stat-label">Contributed to (this year):</text><text x="245" y="13" class="stat-value">${contributedTo}</text></g><g transform="translate(560 68)"><circle r="46" stroke="#0f3809" stroke-width="7"/><circle r="46" stroke="#24e500" stroke-width="7" class="ring" stroke-linecap="round" transform="rotate(-90)"/><text y="5" text-anchor="middle" class="rank-text">${rank}</text><text y="23" text-anchor="middle" class="score-text">${score}/100</text></g></g>
+<line x1="28" y1="330" x2="772" y2="330" class="divider"/><text x="28" y="364" class="section-title">Most Used Languages</text><g clip-path="url(#bar-clip)">${languageBars}</g><g>${leftLanguages}</g><g>${rightLanguages}</g><line x1="28" y1="574" x2="772" y2="574" class="divider"/><text x="28" y="584" class="footer fade" style="animation-delay:1.8s">github.com/${escapeXml(USERNAME)}</text></svg>`;
 
 fs.mkdirSync('assets', { recursive: true });
 fs.writeFileSync(path.join('assets', 'stats.svg'), svg);
-console.log('assets/stats.svg успешно обновлен!');
+console.log(`assets/stats.svg обновлен; оценка ${score}/100 (${rank}).`);
