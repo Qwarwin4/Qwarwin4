@@ -6,11 +6,6 @@ const TOKEN = process.env.GH_TOKEN;
 const INCLUDE_FORKS = process.env.INCLUDE_FORKS === 'true';
 const LANG_SLOTS = 6;
 
-if (!TOKEN) {
-  console.error('Ошибка: не задан GH_TOKEN');
-  process.exit(1);
-}
-
 const currentYear = new Date().getFullYear();
 const fromDate = `${currentYear}-01-01T00:00:00Z`;
 
@@ -46,22 +41,114 @@ query($login: String!, $from: DateTime!) {
 }
 `;
 
-const res = await fetch('https://api.github.com/graphql', {
-  method: 'POST',
-  headers: {
-    Authorization: `Bearer ${TOKEN}`,
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify({ query, variables: { login: USERNAME, from: fromDate } }),
-});
+async function viaGraphql() {
+  const res = await fetch('https://api.github.com/graphql', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${TOKEN}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ query, variables: { login: USERNAME, from: fromDate } }),
+  });
 
-const json = await res.json();
-if (json.errors) {
-  console.error(json.errors);
-  process.exit(1);
+  const json = await res.json();
+  if (json.errors) {
+    console.error(json.errors);
+    process.exit(1);
+  }
+  return json.data.user;
 }
 
-const user = json.data.user;
+const COLORS = {
+  'C++': '#f34b7d', C: '#555555', 'C#': '#178600', Java: '#b07219', Python: '#3572A5',
+  Rust: '#dea584', Go: '#00ADD8', JavaScript: '#f1e05a', TypeScript: '#3178c6',
+  Dart: '#00B4AB', Kotlin: '#A97BFF', Shell: '#89e051', HTML: '#e34c26', CSS: '#563d7c',
+  Haskell: '#5e5086', Lua: '#000080', PowerShell: '#012456', Batchfile: '#C1F12E',
+  Dockerfile: '#384d54', Makefile: '#427819', CMake: '#DA3434', Swift: '#F05138',
+  Ruby: '#701516', PHP: '#4F5D95', Vue: '#41b883', Nix: '#7e7eff', Zig: '#ec915c',
+  QML: '#44a51c', GLSL: '#5686a5', 'Objective-C': '#438eff',
+};
+
+const colorOf = (name) => {
+  if (COLORS[name]) return COLORS[name];
+  let h = 0;
+  for (const ch of name) h = (h * 31 + ch.charCodeAt(0)) % 360;
+  return `hsl(${h} 60% 55%)`;
+};
+
+async function rest(pathname) {
+  const res = await fetch(`https://api.github.com${pathname}`, {
+    headers: { Accept: 'application/vnd.github+json', 'User-Agent': 'stats-generator' },
+  });
+  if (res.status === 403 || res.status === 429) {
+    throw new Error('лимит публичного API исчерпан (60 запросов в час без токена), попробуй позже или задай GH_TOKEN');
+  }
+  if (!res.ok) throw new Error(`GitHub API ${res.status} для ${pathname}`);
+  return res.json();
+}
+
+// то же самое, что отдаёт GraphQL, но из публичного REST API и без токена
+async function viaRest() {
+  console.log('GH_TOKEN не задан: считаю через публичный REST API (лимит 60 запросов в час)');
+
+  const profile = await rest(`/users/${USERNAME}`);
+  const list = await rest(`/users/${USERNAME}/repos?per_page=100&type=owner`);
+  const own = list.filter((r) => INCLUDE_FORKS || !r.fork);
+
+  const nodes = [];
+  for (const r of own) {
+    const bytes = await rest(`/repos/${USERNAME}/${r.name}/languages`);
+    nodes.push({
+      name: r.name,
+      stargazerCount: r.stargazers_count,
+      languages: {
+        edges: Object.entries(bytes).map(([name, size]) => ({ size, node: { name, color: colorOf(name) } })),
+      },
+    });
+  }
+
+  const count = async (kind, q) => {
+    try {
+      const data = await rest(`/search/${kind}?q=${encodeURIComponent(q)}&per_page=1`);
+      return data.total_count;
+    } catch (e) {
+      console.log(`не удалось посчитать "${q}": ${e.message}`);
+      return 0;
+    }
+  };
+
+  const commits = await count('commits', `author:${USERNAME} author-date:>=${currentYear}-01-01`);
+  const prs = await count('issues', `author:${USERNAME} type:pr`);
+  const openIssues = await count('issues', `author:${USERNAME} type:issue state:open`);
+  const closedIssues = await count('issues', `author:${USERNAME} type:issue state:closed`);
+  console.log('без токена коммиты считаются только по публичным репозиториям');
+
+  return {
+    followers: { totalCount: profile.followers },
+    repositories: { totalCount: own.length, nodes },
+    skippedForks: {
+      nodes: list
+        .filter((r) => r.fork && !INCLUDE_FORKS)
+        .map((r) => ({ name: r.name, primaryLanguage: r.language ? { name: r.language } : null })),
+    },
+    contributionsCollection: {
+      totalCommitContributions: commits,
+      restrictedContributionsCount: 0,
+      totalRepositoriesWithContributedCommits: 0,
+    },
+    pullRequests: { totalCount: prs },
+    openIssues: { totalCount: openIssues },
+    closedIssues: { totalCount: closedIssues },
+  };
+}
+
+let user;
+try {
+  user = TOKEN ? await viaGraphql() : await viaRest();
+} catch (e) {
+  console.error(`Ошибка: ${e.message}`);
+  process.exit(1);
+}
 const publicRepos = user.repositories.totalCount;
 const followers = user.followers.totalCount;
 const totalStars = user.repositories.nodes.reduce((acc, r) => acc + r.stargazerCount, 0);
