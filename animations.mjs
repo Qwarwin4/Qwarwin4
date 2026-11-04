@@ -6,6 +6,11 @@ const TOKEN = process.env.GH_TOKEN;
 const INCLUDE_FORKS = process.env.INCLUDE_FORKS === 'true';
 const LANG_SLOTS = 6;
 
+if (!TOKEN) {
+  console.error('Ошибка: не задан GH_TOKEN');
+  process.exit(1);
+}
+
 const currentYear = new Date().getFullYear();
 const fromDate = `${currentYear}-01-01T00:00:00Z`;
 
@@ -41,114 +46,22 @@ query($login: String!, $from: DateTime!) {
 }
 `;
 
-async function viaGraphql() {
-  const res = await fetch('https://api.github.com/graphql', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${TOKEN}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ query, variables: { login: USERNAME, from: fromDate } }),
-  });
+const res = await fetch('https://api.github.com/graphql', {
+  method: 'POST',
+  headers: {
+    Authorization: `Bearer ${TOKEN}`,
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({ query, variables: { login: USERNAME, from: fromDate } }),
+});
 
-  const json = await res.json();
-  if (json.errors) {
-    console.error(json.errors);
-    process.exit(1);
-  }
-  return json.data.user;
-}
-
-const COLORS = {
-  'C++': '#f34b7d', C: '#555555', 'C#': '#178600', Java: '#b07219', Python: '#3572A5',
-  Rust: '#dea584', Go: '#00ADD8', JavaScript: '#f1e05a', TypeScript: '#3178c6',
-  Dart: '#00B4AB', Kotlin: '#A97BFF', Shell: '#89e051', HTML: '#e34c26', CSS: '#563d7c',
-  Haskell: '#5e5086', Lua: '#000080', PowerShell: '#012456', Batchfile: '#C1F12E',
-  Dockerfile: '#384d54', Makefile: '#427819', CMake: '#DA3434', Swift: '#F05138',
-  Ruby: '#701516', PHP: '#4F5D95', Vue: '#41b883', Nix: '#7e7eff', Zig: '#ec915c',
-  QML: '#44a51c', GLSL: '#5686a5', 'Objective-C': '#438eff',
-};
-
-const colorOf = (name) => {
-  if (COLORS[name]) return COLORS[name];
-  let h = 0;
-  for (const ch of name) h = (h * 31 + ch.charCodeAt(0)) % 360;
-  return `hsl(${h} 60% 55%)`;
-};
-
-async function rest(pathname) {
-  const res = await fetch(`https://api.github.com${pathname}`, {
-    headers: { Accept: 'application/vnd.github+json', 'User-Agent': 'stats-generator' },
-  });
-  if (res.status === 403 || res.status === 429) {
-    throw new Error('лимит публичного API исчерпан (60 запросов в час без токена), попробуй позже или задай GH_TOKEN');
-  }
-  if (!res.ok) throw new Error(`GitHub API ${res.status} для ${pathname}`);
-  return res.json();
-}
-
-// то же самое, что отдаёт GraphQL, но из публичного REST API и без токена
-async function viaRest() {
-  console.log('GH_TOKEN не задан: считаю через публичный REST API (лимит 60 запросов в час)');
-
-  const profile = await rest(`/users/${USERNAME}`);
-  const list = await rest(`/users/${USERNAME}/repos?per_page=100&type=owner`);
-  const own = list.filter((r) => INCLUDE_FORKS || !r.fork);
-
-  const nodes = [];
-  for (const r of own) {
-    const bytes = await rest(`/repos/${USERNAME}/${r.name}/languages`);
-    nodes.push({
-      name: r.name,
-      stargazerCount: r.stargazers_count,
-      languages: {
-        edges: Object.entries(bytes).map(([name, size]) => ({ size, node: { name, color: colorOf(name) } })),
-      },
-    });
-  }
-
-  const count = async (kind, q) => {
-    try {
-      const data = await rest(`/search/${kind}?q=${encodeURIComponent(q)}&per_page=1`);
-      return data.total_count;
-    } catch (e) {
-      console.log(`не удалось посчитать "${q}": ${e.message}`);
-      return 0;
-    }
-  };
-
-  const commits = await count('commits', `author:${USERNAME} author-date:>=${currentYear}-01-01`);
-  const prs = await count('issues', `author:${USERNAME} type:pr`);
-  const openIssues = await count('issues', `author:${USERNAME} type:issue state:open`);
-  const closedIssues = await count('issues', `author:${USERNAME} type:issue state:closed`);
-  console.log('без токена коммиты считаются только по публичным репозиториям');
-
-  return {
-    followers: { totalCount: profile.followers },
-    repositories: { totalCount: own.length, nodes },
-    skippedForks: {
-      nodes: list
-        .filter((r) => r.fork && !INCLUDE_FORKS)
-        .map((r) => ({ name: r.name, primaryLanguage: r.language ? { name: r.language } : null })),
-    },
-    contributionsCollection: {
-      totalCommitContributions: commits,
-      restrictedContributionsCount: 0,
-      totalRepositoriesWithContributedCommits: 0,
-    },
-    pullRequests: { totalCount: prs },
-    openIssues: { totalCount: openIssues },
-    closedIssues: { totalCount: closedIssues },
-  };
-}
-
-let user;
-try {
-  user = TOKEN ? await viaGraphql() : await viaRest();
-} catch (e) {
-  console.error(`Ошибка: ${e.message}`);
+const json = await res.json();
+if (json.errors) {
+  console.error(json.errors);
   process.exit(1);
 }
+
+const user = json.data.user;
 const publicRepos = user.repositories.totalCount;
 const followers = user.followers.totalCount;
 const totalStars = user.repositories.nodes.reduce((acc, r) => acc + r.stargazerCount, 0);
@@ -290,7 +203,7 @@ const svg = `<svg width="800" height="520" viewBox="0 0 800 520" fill="none" xml
 
   <g transform="translate(28, 174)">
     <g class="fade" style="animation-delay: 0.40s" transform="translate(0, 0)">
-      <path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Zm0 2.445L6.615 5.5a.75.75 0 0 1-.564.41l-3.097.45 2.24 2.184a.75.75 0 0 1 .216.664l-.528 3.084 2.769-1.456a.75.75 0 0 1 .698 0l2.77 1.456-.53-3.084a.75.75 0 0 1 .216-.664l2.24-2.183-3.096-.45a.75.75 0 0 1-.564-.41L8 2.694Z" fill="#24e500"/>
+      <path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6[...]" fill="#24e500"/>
       <text x="28" y="13" class="stat-label">Total Stars Earned:</text>
       <text x="270" y="13" class="stat-value">${totalStars}</text>
     </g>
@@ -302,7 +215,7 @@ const svg = `<svg width="800" height="520" viewBox="0 0 800 520" fill="none" xml
     </g>
 
     <g class="fade" style="animation-delay: 0.64s" transform="translate(0, 60)">
-      <path d="M1.5 3.25a2.25 2.25 0 1 1 3 2.122v5.256a2.251 2.251 0 1 1-1.5 0V5.372A2.25 2.25 0 0 1 1.5 3.25Zm5.677-.177L9.573.677A.25.25 0 0 1 10 .854V2.5h1A2.5 2.5 0 0 1 13.5 5v5.628a2.251 2.251 0 1 1-1.5 0V5a1 1 0 0 0-1-1h-1v1.646a.25.25 0 0 1-.427.177L7.177 3.427a.25.25 0 0 1 0-.354ZM3.75 2.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Zm0 9.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Zm8.25.75a.75.75 0 1 0 1.5 0 .75.75 0 0 0-1.5 0Z" fill="#24e500"/>
+      <path d="M1.5 3.25a2.25 2.25 0 1 1 3 2.122v5.256a2.251 2.251 0 1 1-1.5 0V5.372A2.25 2.25 0 0 1 1.5 3.25Zm5.677-.177L9.573.677A.25.25 0 0 1 10 .854V2.5h1A2.5 2.5 0 0 1 13.5 5v5.628a2.251 2.25" fill="#24e500"/>
       <text x="28" y="13" class="stat-label">Total PRs:</text>
       <text x="270" y="13" class="stat-value">${prs}</text>
     </g>
@@ -315,7 +228,7 @@ const svg = `<svg width="800" height="520" viewBox="0 0 800 520" fill="none" xml
     </g>
 
     <g class="fade" style="animation-delay: 0.88s" transform="translate(0, 120)">
-      <path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z" fill="#24e500"/>
+      <path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm1" fill="#24e500"/>
       <text x="28" y="13" class="stat-label">Contributed to (last year):</text>
       <text x="270" y="13" class="stat-value">${contributedTo}</text>
     </g>
