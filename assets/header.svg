@@ -91,10 +91,6 @@
     <line x1="0" y1="36" x2="850" y2="36" stroke="#1f6f12" stroke-width="1"/>
     <text x="18" y="24" font-size="15" font-weight="700" fill="#24e500">&gt;_</text>
     <text x="425" y="23" text-anchor="middle" class="bar-title">Terminal</text>
-    <g stroke="#8b949e" stroke-width="1.6" stroke-linecap="round" fill="none">
-      <line x1="741" y1="23" x2="751" y2="23"/><rect x="781" y="13" width="9" height="9" rx="1.5"/>
-      <line x1="820" y1="13" x2="829" y2="22"/><line x1="829" y1="13" x2="820" y2="22"/>
-    </g>
 
     <g class="screen">
       <text x="36" y="76" class="term"><tspan fill="#1793d1" font-weight="700">~</tspan><tspan fill="#24e500" font-weight="700"> $</tspan></text>
@@ -120,9 +116,14 @@
     <rect y="340" width="112" height="28" fill="#24e500"/>
     <text x="56" y="359" text-anchor="middle" class="st-mode">NORMAL</text>
     <text x="130" y="359" class="st">~/Qwarwin4</text>
-    <text x="246" y="359" class="st" fill-opacity="0.55">main</text>
-    <text x="770" y="359" text-anchor="end" class="st">Rust · C++ · Go · Python</text>
-    <circle cx="796" cy="354" r="4" fill="#24e500" class="live"/>
-    <text x="808" y="359" class="st">on</text>
+    <text x="246" y="359" class="st">main</text>
+    <g transform="translate(286 348)" aria-label="Git">
+      <path d="M10 0.8 19.2 10 10 19.2.8 10 10 .8Z" fill="#F05032"/>
+      <path d="M7 6.5v7M7 9h5M12 9v5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="7" cy="6.5" r="1.5" fill="#fff"/>
+      <circle cx="7" cy="13.5" r="1.5" fill="#fff"/>
+      <circle cx="12" cy="9" r="1.5" fill="#fff"/>
+      <circle cx="12" cy="14" r="1.5" fill="#fff"/>
+    </g>
   </g>
 </svg>
