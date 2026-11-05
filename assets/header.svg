@@ -1,31 +1,11 @@
 <svg width="850" height="368" viewBox="0 0 850 368" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="bg-grad" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#08110a"/>
-      <stop offset="0.6" stop-color="#05070a"/>
-      <stop offset="1" stop-color="#05070a"/>
-    </linearGradient>
-    <radialGradient id="corner-glow" cx="1" cy="0" r="0.8">
-      <stop offset="0" stop-color="#24e500" stop-opacity="0.14"/>
-      <stop offset="1" stop-color="#24e500" stop-opacity="0"/>
-    </radialGradient>
-    <linearGradient id="line-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#24e500" stop-opacity="1"/>
-      <stop offset="75%" stop-color="#24e500" stop-opacity="0.8"/>
-      <stop offset="100%" stop-color="#24e500" stop-opacity="0"/>
-    </linearGradient>
-    <pattern id="scan" width="4" height="4" patternUnits="userSpaceOnUse">
-      <rect width="4" height="1" fill="#24e500" fill-opacity="0.035"/>
-    </pattern>
-    <filter id="neon-glow" x="-30%" y="-50%" width="160%" height="200%">
-      <feGaussianBlur stdDeviation="4" result="blur1"/>
-      <feGaussianBlur stdDeviation="10" result="blur2"/>
-      <feMerge><feMergeNode in="blur2"/><feMergeNode in="blur1"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
-    <filter id="soft-glow" x="-20%" y="-40%" width="140%" height="180%">
-      <feGaussianBlur stdDeviation="2.5" result="blur"/>
-      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
+    <linearGradient id="bg-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#08110a"/><stop offset="0.6" stop-color="#05070a"/><stop offset="1" stop-color="#05070a"/></linearGradient>
+    <radialGradient id="corner-glow" cx="1" cy="0" r="0.8"><stop offset="0" stop-color="#24e500" stop-opacity="0.14"/><stop offset="1" stop-color="#24e500" stop-opacity="0"/></radialGradient>
+    <linearGradient id="line-grad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#24e500"/><stop offset="75%" stop-color="#24e500" stop-opacity="0.8"/><stop offset="100%" stop-color="#24e500" stop-opacity="0"/></linearGradient>
+    <pattern id="scan" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="4" height="1" fill="#24e500" fill-opacity="0.035"/></pattern>
+    <filter id="neon-glow" x="-30%" y="-50%" width="160%" height="200%"><feGaussianBlur stdDeviation="4" result="blur1"/><feGaussianBlur stdDeviation="10" result="blur2"/><feMerge><feMergeNode in="blur2"/><feMergeNode in="blur1"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="soft-glow" x="-20%" y="-40%" width="140%" height="180%"><feGaussianBlur stdDeviation="2.5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
     <clipPath id="win-clip"><rect width="850" height="368" rx="14"/></clipPath>
     <clipPath id="clip-cmd"><rect x="84" y="58" height="26" width="0" class="m-cmd"/></clipPath>
     <clipPath id="clip-t"><rect x="36" y="90" height="50" width="0" class="m-t"/></clipPath>
@@ -34,7 +14,6 @@
     <clipPath id="clip-b2"><rect x="62" y="232" height="24" width="0" class="m-b2"/></clipPath>
     <clipPath id="clip-b3"><rect x="62" y="260" height="24" width="0" class="m-b3"/></clipPath>
   </defs>
-
   <style>
     text { font-family: 'Fira Code', 'JetBrains Mono', 'Courier New', monospace; text-rendering: optimizeLegibility; }
     .bar-title { font-size: 13px; fill: #8b949e; }
@@ -49,81 +28,45 @@
     .screen { animation: screen 12s infinite; }
     .fade-line { animation: lines 12s infinite; }
     .prompt2 { animation: prompt2 12s infinite; }
-
     @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
     @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
     @keyframes screen { 0% { opacity: 0; } 1.5%, 94% { opacity: 1; } 97%, 100% { opacity: 0; } }
     @keyframes lines { 0%, 39.5% { opacity: 0; } 42%, 100% { opacity: 1; } }
     @keyframes prompt2 { 0%, 75% { opacity: 0; } 76%, 100% { opacity: 1; } }
-
-    .m-cmd { animation: m-cmd 12s infinite; }
-    @keyframes m-cmd { 0%, 4% { width: 0; animation-timing-function: steps(6, end); } 11%, 100% { width: 72px; } }
-    .m-t { animation: m-t 12s infinite; }
-    @keyframes m-t { 0%, 13% { width: 0; animation-timing-function: steps(16, end); } 24%, 100% { width: 384px; } }
-    .m-s { animation: m-s 12s infinite; }
-    @keyframes m-s { 0%, 25% { width: 0; animation-timing-function: steps(38, end); } 39%, 100% { width: 547.2px; } }
-    .m-b1 { animation: m-b1 12s infinite; }
-    @keyframes m-b1 { 0%, 43% { width: 0; animation-timing-function: steps(25, end); } 51%, 100% { width: 300px; } }
-    .m-b2 { animation: m-b2 12s infinite; }
-    @keyframes m-b2 { 0%, 51% { width: 0; animation-timing-function: steps(26, end); } 59%, 100% { width: 312px; } }
-    .m-b3 { animation: m-b3 12s infinite; }
-    @keyframes m-b3 { 0%, 59% { width: 0; animation-timing-function: steps(46, end); } 74%, 100% { width: 552px; } }
-
-    .c-cmd { animation: c-cmd 12s infinite; }
-    @keyframes c-cmd { 0%, .9% { opacity: 0; transform: translateX(0); } 1% { opacity: 1; transform: translateX(0); } 4% { opacity: 1; transform: translateX(0); animation-timing-function: steps(6, end); } 10.9% { opacity: 1; transform: translateX(72px); } 11%, 100% { opacity: 0; transform: translateX(72px); } }
-    .c-t { animation: c-t 12s infinite; }
-    @keyframes c-t { 0%, 12.9% { opacity: 0; transform: translateX(0); } 13% { opacity: 1; transform: translateX(0); animation-timing-function: steps(16, end); } 23.9% { opacity: 1; transform: translateX(384px); } 24%, 100% { opacity: 0; transform: translateX(384px); } }
-    .c-s { animation: c-s 12s infinite; }
-    @keyframes c-s { 0%, 24.9% { opacity: 0; transform: translateX(0); } 25% { opacity: 1; transform: translateX(0); animation-timing-function: steps(38, end); } 38.9% { opacity: 1; transform: translateX(547.2px); } 39%, 100% { opacity: 0; transform: translateX(547.2px); } }
-    .c-b1 { animation: c-b1 12s infinite; }
-    @keyframes c-b1 { 0%, 42.9% { opacity: 0; transform: translateX(0); } 43% { opacity: 1; transform: translateX(0); animation-timing-function: steps(25, end); } 50.9% { opacity: 1; transform: translateX(300px); } 51%, 100% { opacity: 0; transform: translateX(300px); } }
-    .c-b2 { animation: c-b2 12s infinite; }
-    @keyframes c-b2 { 0%, 50.9% { opacity: 0; transform: translateX(0); } 51% { opacity: 1; transform: translateX(0); animation-timing-function: steps(26, end); } 58.9% { opacity: 1; transform: translateX(312px); } 59%, 100% { opacity: 0; transform: translateX(312px); } }
-    .c-b3 { animation: c-b3 12s infinite; }
-    @keyframes c-b3 { 0%, 58.9% { opacity: 0; transform: translateX(0); } 59% { opacity: 1; transform: translateX(0); animation-timing-function: steps(46, end); } 73.9% { opacity: 1; transform: translateX(552px); } 74%, 100% { opacity: 0; transform: translateX(552px); } }
+    .m-cmd { animation: m-cmd 12s infinite; } @keyframes m-cmd { 0%, 4% { width: 0; animation-timing-function: steps(6, end); } 11%, 100% { width: 72px; } }
+    .m-t { animation: m-t 12s infinite; } @keyframes m-t { 0%, 13% { width: 0; animation-timing-function: steps(16, end); } 24%, 100% { width: 384px; } }
+    .m-s { animation: m-s 12s infinite; } @keyframes m-s { 0%, 25% { width: 0; animation-timing-function: steps(38, end); } 39%, 100% { width: 547.2px; } }
+    .m-b1 { animation: m-b1 12s infinite; } @keyframes m-b1 { 0%, 43% { width: 0; animation-timing-function: steps(25, end); } 51%, 100% { width: 300px; } }
+    .m-b2 { animation: m-b2 12s infinite; } @keyframes m-b2 { 0%, 51% { width: 0; animation-timing-function: steps(26, end); } 59%, 100% { width: 312px; } }
+    .m-b3 { animation: m-b3 12s infinite; } @keyframes m-b3 { 0%, 59% { width: 0; animation-timing-function: steps(46, end); } 74%, 100% { width: 552px; } }
+    .c-cmd { animation: c-cmd 12s infinite; } @keyframes c-cmd { 0%, .9% { opacity: 0; transform: translateX(0); } 1% { opacity: 1; transform: translateX(0); } 4% { opacity: 1; transform: translateX(0); animation-timing-function: steps(6, end); } 10.9% { opacity: 1; transform: translateX(72px); } 11%, 100% { opacity: 0; transform: translateX(72px); } }
+    .c-t { animation: c-t 12s infinite; } @keyframes c-t { 0%, 12.9% { opacity: 0; transform: translateX(0); } 13% { opacity: 1; transform: translateX(0); animation-timing-function: steps(16, end); } 23.9% { opacity: 1; transform: translateX(384px); } 24%, 100% { opacity: 0; transform: translateX(384px); } }
+    .c-s { animation: c-s 12s infinite; } @keyframes c-s { 0%, 24.9% { opacity: 0; transform: translateX(0); } 25% { opacity: 1; transform: translateX(0); animation-timing-function: steps(38, end); } 38.9% { opacity: 1; transform: translateX(547.2px); } 39%, 100% { opacity: 0; transform: translateX(547.2px); } }
+    .c-b1 { animation: c-b1 12s infinite; } @keyframes c-b1 { 0%, 42.9% { opacity: 0; transform: translateX(0); } 43% { opacity: 1; transform: translateX(0); animation-timing-function: steps(25, end); } 50.9% { opacity: 1; transform: translateX(300px); } 51%, 100% { opacity: 0; transform: translateX(300px); } }
+    .c-b2 { animation: c-b2 12s infinite; } @keyframes c-b2 { 0%, 50.9% { opacity: 0; transform: translateX(0); } 51% { opacity: 1; transform: translateX(0); animation-timing-function: steps(26, end); } 58.9% { opacity: 1; transform: translateX(312px); } 59%, 100% { opacity: 0; transform: translateX(312px); } }
+    .c-b3 { animation: c-b3 12s infinite; } @keyframes c-b3 { 0%, 58.9% { opacity: 0; transform: translateX(0); } 59% { opacity: 1; transform: translateX(0); animation-timing-function: steps(46, end); } 73.9% { opacity: 1; transform: translateX(552px); } 74%, 100% { opacity: 0; transform: translateX(552px); } }
   </style>
-
   <g clip-path="url(#win-clip)">
-    <rect width="850" height="368" fill="url(#bg-grad)"/>
-    <rect width="850" height="368" fill="url(#corner-glow)"/>
-    <rect width="850" height="368" fill="url(#scan)"/>
-    <rect width="850" height="36" fill="#0b1210"/>
-    <line x1="0" y1="36" x2="850" y2="36" stroke="#1f6f12" stroke-width="1"/>
-    <text x="18" y="24" font-size="15" font-weight="700" fill="#24e500">&gt;_</text>
-    <text x="425" y="23" text-anchor="middle" class="bar-title">Terminal</text>
-
+    <rect width="850" height="368" fill="url(#bg-grad)"/><rect width="850" height="368" fill="url(#corner-glow)"/><rect width="850" height="368" fill="url(#scan)"/>
+    <rect width="850" height="36" fill="#0b1210"/><line x1="0" y1="36" x2="850" y2="36" stroke="#1f6f12" stroke-width="1"/>
+    <text x="18" y="24" font-size="15" font-weight="700" fill="#24e500">&gt;_</text><text x="425" y="23" text-anchor="middle" class="bar-title">Terminal</text>
     <g class="screen">
       <text x="36" y="76" class="term"><tspan fill="#1793d1" font-weight="700">~</tspan><tspan fill="#24e500" font-weight="700"> $</tspan></text>
-      <g clip-path="url(#clip-cmd)"><text x="84" y="76" class="term">whoami</text></g>
-      <g class="blink"><rect x="84" y="60.6" width="12" height="19" fill="#24e500" class="c-cmd"/></g>
-      <g filter="url(#neon-glow)"><g clip-path="url(#clip-t)"><text x="36" y="128" class="big">Hey, I'm Qwarwin</text></g></g>
-      <g class="blink"><rect x="36" y="97.2" width="24" height="38" fill="#24e500" class="c-t"/></g>
-      <g clip-path="url(#clip-s)"><text x="36" y="166" class="sub">Developer <tspan class="dot">•</tspan> Designer <tspan class="dot">•</tspan> Tech Enthusiast</text></g>
-      <g class="blink"><rect x="36" y="147.5" width="14.4" height="22.8" fill="#24e500" class="c-s"/></g>
-      <rect x="36" y="182" width="778" height="3.5" fill="url(#line-grad)" filter="url(#soft-glow)" class="fade-line"/>
-      <rect x="36" y="204" width="6" height="84" fill="#24e500" filter="url(#soft-glow)" class="fade-line"/>
-      <g clip-path="url(#clip-b1)"><text x="62" y="222" class="term">I build things that work,</text></g>
-      <g class="blink"><rect x="62" y="206.6" width="12" height="19" fill="#24e500" class="c-b1"/></g>
-      <g clip-path="url(#clip-b2)"><text x="62" y="250" class="term">break things to learn, and</text></g>
-      <g class="blink"><rect x="62" y="234.6" width="12" height="19" fill="#24e500" class="c-b2"/></g>
-      <g clip-path="url(#clip-b3)"><text x="62" y="278" class="term">occasionally make stuff that looks decent too.</text></g>
-      <g class="blink"><rect x="62" y="262.6" width="12" height="19" fill="#24e500" class="c-b3"/></g>
+      <g clip-path="url(#clip-cmd)"><text x="84" y="76" class="term">whoami</text></g><g class="blink"><rect x="84" y="60.6" width="12" height="19" fill="#24e500" class="c-cmd"/></g>
+      <g filter="url(#neon-glow)"><g clip-path="url(#clip-t)"><text x="36" y="128" class="big">Hey, I'm Qwarwin</text></g></g><g class="blink"><rect x="36" y="97.2" width="24" height="38" fill="#24e500" class="c-t"/></g>
+      <g clip-path="url(#clip-s)"><text x="36" y="166" class="sub">Developer <tspan class="dot">•</tspan> Designer <tspan class="dot">•</tspan> Tech Enthusiast</text></g><g class="blink"><rect x="36" y="147.5" width="14.4" height="22.8" fill="#24e500" class="c-s"/></g>
+      <rect x="36" y="182" width="778" height="3.5" fill="url(#line-grad)" filter="url(#soft-glow)" class="fade-line"/><rect x="36" y="204" width="6" height="84" fill="#24e500" filter="url(#soft-glow)" class="fade-line"/>
+      <g clip-path="url(#clip-b1)"><text x="62" y="222" class="term">I build things that work,</text></g><g class="blink"><rect x="62" y="206.6" width="12" height="19" fill="#24e500" class="c-b1"/></g>
+      <g clip-path="url(#clip-b2)"><text x="62" y="250" class="term">break things to learn, and</text></g><g class="blink"><rect x="62" y="234.6" width="12" height="19" fill="#24e500" class="c-b2"/></g>
+      <g clip-path="url(#clip-b3)"><text x="62" y="278" class="term">occasionally make stuff that looks decent too.</text></g><g class="blink"><rect x="62" y="262.6" width="12" height="19" fill="#24e500" class="c-b3"/></g>
       <g class="prompt2"><text x="36" y="326" class="term"><tspan fill="#1793d1" font-weight="700">~</tspan><tspan fill="#24e500" font-weight="700"> $</tspan></text><g class="blink"><rect x="84" y="310.6" width="12" height="19" fill="#24e500"/></g></g>
     </g>
-
-    <rect y="340" width="850" height="28" fill="#0b1210"/>
-    <line x1="0" y1="340" x2="850" y2="340" stroke="#1f6f12" stroke-width="1"/>
-    <rect y="340" width="112" height="28" fill="#24e500"/>
-    <text x="56" y="359" text-anchor="middle" class="st-mode">NORMAL</text>
+    <rect y="340" width="850" height="28" fill="#0b1210"/><line x1="0" y1="340" x2="850" y2="340" stroke="#1f6f12" stroke-width="1"/>
+    <rect y="340" width="112" height="28" fill="#24e500"/><text x="56" y="359" text-anchor="middle" class="st-mode">NORMAL</text>
     <text x="130" y="359" class="st">~/Qwarwin4</text>
-    <text x="246" y="359" class="st">main</text>
-    <g transform="translate(286 348)" aria-label="Git">
-      <path d="M10 0.8 19.2 10 10 19.2.8 10 10 .8Z" fill="#F05032"/>
-      <path d="M7 6.5v7M7 9h5M12 9v5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      <circle cx="7" cy="6.5" r="1.5" fill="#fff"/>
-      <circle cx="7" cy="13.5" r="1.5" fill="#fff"/>
-      <circle cx="12" cy="9" r="1.5" fill="#fff"/>
-      <circle cx="12" cy="14" r="1.5" fill="#fff"/>
+    <g transform="translate(234 346)" aria-label="Git logo" fill="#F05032">
+      <path d="M23.546 10.959 13.04.454a1.56 1.56 0 0 0-2.207 0L8.65 2.637l2.77 2.77a1.85 1.85 0 0 1 2.345 2.357l2.67 2.67a1.85 1.85 0 1 1-1.11 1.045l-2.49-2.49v6.56a1.85 1.85 0 1 1-1.52-.055V8.873a1.85 1.85 0 0 1-1.006-2.426L7.58 3.72.454 10.846a1.56 1.56 0 0 0 0 2.207l10.505 10.505a1.56 1.56 0 0 0 2.207 0l10.38-10.392a1.56 1.56 0 0 0 0-2.207ZM10.17 17.57a.79.79 0 1 0 0 1.58.79.79 0 0 0 0-1.58Zm3.12-5.77a.79.79 0 1 0 0 1.58.79.79 0 0 0 0-1.58Zm-1.76-6.03a.79.79 0 1 0 0 1.58.79.79 0 0 0 0-1.58Z"/>
     </g>
+    <text x="264" y="359" class="st">main</text>
   </g>
 </svg>
