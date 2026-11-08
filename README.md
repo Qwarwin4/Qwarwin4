@@ -1,7 +1,7 @@
 <div align="center">
 
 <p align="center">
-  <img src="./assets/header.svg" width="760" alt="Header" />
+  <img src="./assets/stats.svg?v=2" width="720" alt="GitHub Stats" />
 </p>
 
 ---
