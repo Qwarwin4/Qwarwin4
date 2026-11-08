@@ -1,7 +1,7 @@
 <div align="center">
 
 <p align="center">
-  <img src="./assets/stats.svg?v=2" width="720" alt="GitHub Stats" />
+   <img src="./assets/header.svg?" width="720" alt="" />
 </p>
 
 ---
@@ -31,7 +31,7 @@
 ## 📊 Github Stats
 
 <p align="center">
-  <img src="./assets/stats.svg" width="720" alt="GitHub Stats" />
+   <img src="./assets/stats.svg?v=2" width="720" alt="GitHub Stats" />
 </p>
 
 ## 📬 Find me here
