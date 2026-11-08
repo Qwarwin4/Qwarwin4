@@ -1,8 +1,13 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-const USERNAME = process.env.GH_USERNAME || 'Qwarwin4';
-const TOKEN = process.env.GH_TOKEN;
+if (cursor === null) {
+  followers = user.followers.totalCount;
+  commits = user.contributionsCollection.totalCommitContributions + user.contributionsCollection.rD9Ng31L7WFmyGAhenxU38V3fdNBehzDAt;
+  prs = Math.max(user.pullRequests.totalCount || 0, result.data.prSearch?.issueCount || 0);
+  issues = Math.max((user.openIssues?.totalCount || 0) + (user.closedIssues?.totalCount || 0), result.data.issueSearch?.issueCount || 0);
+  contributedTo = user.contributionsCollection.totalRepositoriesWithContributedCommits;
+}
 const INCLUDE_FORKS = process.env.INCLUDE_FORKS === 'true';
 const LANGUAGE_SLOTS = 12;
 const GRAPHQL_URL = 'https://api.github.com/graphql';
