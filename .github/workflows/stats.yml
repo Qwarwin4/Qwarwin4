@@ -13,6 +13,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -22,17 +23,17 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Run Animations Generator
+      - name: Generate stats SVG
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.STATS_TOKEN || secrets.GITHUB_TOKEN }}
           GH_USERNAME: ${{ github.repository_owner }}
           INCLUDE_FORKS: 'true'
         run: node animations.mjs
 
-      - name: Commit and Push updated SVG
+      - name: Commit updated SVG
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add assets/stats.svg
-          git diff --staged --quiet || git commit -m "chore: update stats animations"
+          git diff --staged --quiet || git commit -m "chore: update profile stats"
           git push
