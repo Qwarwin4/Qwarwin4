@@ -1,13 +1,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-if (cursor === null) {
-  followers = user.followers.totalCount;
-  commits = user.contributionsCollection.totalCommitContributions + user.contributionsCollection.rD9Ng31L7WFmyGAhenxU38V3fdNBehzDAt;
-  prs = Math.max(user.pullRequests.totalCount || 0, result.data.prSearch?.issueCount || 0);
-  issues = Math.max((user.openIssues?.totalCount || 0) + (user.closedIssues?.totalCount || 0), result.data.issueSearch?.issueCount || 0);
-  contributedTo = user.contributionsCollection.totalRepositoriesWithContributedCommits;
-}
+const USERNAME = process.env.GH_USERNAME || 'Qwarwin4';
+const TOKEN = process.env.GH_TOKEN;
 const INCLUDE_FORKS = process.env.INCLUDE_FORKS === 'true';
 const LANGUAGE_SLOTS = 12;
 const GRAPHQL_URL = 'https://api.github.com/graphql';
@@ -21,7 +16,7 @@ const currentYear = new Date().getFullYear();
 const fromDate = `${currentYear}-01-01T00:00:00Z`;
 const forkFilter = INCLUDE_FORKS ? '' : 'isFork: false,';
 const query = `
-query($login: String!, $from: DateTime!, $cursor: String) {
+query($login: String!, $from: DateTime!, $cursor: String, $prQuery: String!, $issueQuery: String!) {
   user(login: $login) {
     followers { totalCount }
     repositories(first: 100, after: $cursor, ownerAffiliations: OWNER, ${forkFilter} privacy: PUBLIC) {
@@ -43,6 +38,8 @@ query($login: String!, $from: DateTime!, $cursor: String) {
     openIssues: issues(first: 1, states: OPEN) { totalCount }
     closedIssues: issues(first: 1, states: CLOSED) { totalCount }
   }
+  prSearch: search(query: $prQuery, type: ISSUE, first: 1) { issueCount }
+  issueSearch: search(query: $issueQuery, type: ISSUE, first: 1) { issueCount }
 }
 `;
 
@@ -64,7 +61,16 @@ async function getStats() {
         Authorization: `Bearer ${TOKEN}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ query, variables: { login: USERNAME, from: fromDate, cursor } }),
+      body: JSON.stringify({
+        query,
+        variables: {
+          login: USERNAME,
+          from: fromDate,
+          cursor,
+          prQuery: `author:${USERNAME} is:pr`,
+          issueQuery: `author:${USERNAME} is:issue`,
+        },
+      }),
     });
     const result = await response.json();
     if (!response.ok || result.errors || !result.data?.user) {
@@ -86,8 +92,8 @@ async function getStats() {
     if (cursor === null) {
       followers = user.followers.totalCount;
       commits = user.contributionsCollection.totalCommitContributions + user.contributionsCollection.restrictedContributionsCount;
-      prs = user.pullRequests.totalCount;
-      issues = user.openIssues.totalCount + user.closedIssues.totalCount;
+      prs = Math.max(user.pullRequests.totalCount || 0, result.data.prSearch?.issueCount || 0);
+      issues = Math.max((user.openIssues?.totalCount || 0) + (user.closedIssues?.totalCount || 0), result.data.issueSearch?.issueCount || 0);
       contributedTo = user.contributionsCollection.totalRepositoriesWithContributedCommits;
     }
     cursor = repositories.pageInfo.hasNextPage ? repositories.pageInfo.endCursor : null;
