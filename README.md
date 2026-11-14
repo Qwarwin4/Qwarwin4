@@ -31,7 +31,7 @@
 ## 📊 Github Stats
 
 <p align="center">
-   <img src="./assets/stats.svg?v=1794682702349" width="720" alt="GitHub Stats" />
+   <img src="./assets/stats.svg?v=1794696933590" width="720" alt="GitHub Stats" />
 </p>
 
 ## 📬 Find me here
