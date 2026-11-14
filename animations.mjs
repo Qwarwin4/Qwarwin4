@@ -86,20 +86,18 @@ async function getStats() {
   do {
     const { user } = await gql(reposQuery, { login: USERNAME, from: fromDate, cursor });
     const repositories = user.repositories;
-    totalRepos = repositories.totalCount;
     for (const repo of repositories.nodes) {
-      totalStars += repo.stargazerCount;
       commits += repo.defaultBranchRef?.target?.history?.totalCount || 0;
       prs += repo.pullRequests.totalCount;
       issues += repo.issues.totalCount;
-      // языки — только публичные репозитории
-      if (!repo.isPrivate) {
-        for (const { size, node } of repo.languages.edges) {
-          const existing = languages.get(node.name) || { size: 0, color: node.color || '#24e500' };
-          existing.size += size;
-          if (node.color) existing.color = node.color;
-          languages.set(node.name, existing);
-        }
+      if (repo.isPrivate) continue;
+      totalRepos++;
+      totalStars += repo.stargazerCount;
+      for (const { size, node } of repo.languages.edges) {
+        const existing = languages.get(node.name) || { size: 0, color: node.color || '#24e500' };
+        existing.size += size;
+        if (node.color) existing.color = node.color;
+        languages.set(node.name, existing);
       }
     }
     cursor = repositories.pageInfo.hasNextPage ? repositories.pageInfo.endCursor : null;
@@ -176,7 +174,7 @@ const svg = `<svg width="800" height="590" viewBox="0 0 800 590" fill="none" xml
 </style>
 <defs><clipPath id="bar-clip"><rect x="28" y="408" height="12" rx="6" class="bar-reveal"/></clipPath></defs>
 <rect x="1" y="1" width="798" height="588" rx="18" fill="#070a0e" stroke="#24e500" stroke-width="1.5"/><text x="28" y="42" class="title fade">${escapeXml(USERNAME)} · GitHub Stats</text><line x1="28" y1="60" x2="772" y2="60" class="divider"/>
-<g class="fade" style="animation-delay:.1s"><text x="28" y="92" class="metric-label">REPOSITORIES</text><text x="28" y="130" class="metric-value">${totalRepos}</text></g><g class="fade" style="animation-delay:.25s"><text x="285" y="92" class="metric-label">TOTAL STARS</text><text x="285" y="130" class="metric-value">${totalStars}</text></g><g class="fade" style="animation-delay:.4s"><text x="540" y="92" class="metric-label">FOLLOWERS</text><text x="540" y="130" class="metric-value">${followers}</text></g>
+<g class="fade" style="animation-delay:.1s"><text x="28" y="92" class="metric-label">PUBLIC REPOSITORIES</text><text x="28" y="130" class="metric-value">${totalRepos}</text></g><g class="fade" style="animation-delay:.25s"><text x="285" y="92" class="metric-label">TOTAL STARS</text><text x="285" y="130" class="metric-value">${totalStars}</text></g><g class="fade" style="animation-delay:.4s"><text x="540" y="92" class="metric-label">FOLLOWERS</text><text x="540" y="130" class="metric-value">${followers}</text></g>
 <line x1="28" y1="152" x2="772" y2="152" class="divider"/><g transform="translate(28 174)"><g class="fade" style="animation-delay:.4s"><text y="13" class="stat-label">Total Stars Earned:</text><text x="245" y="13" class="stat-value">${totalStars}</text></g><g class="fade" style="animation-delay:.52s" transform="translate(0 30)"><text y="13" class="stat-label">Total Commits (${currentYear}):</text><text x="245" y="13" class="stat-value">${commits}</text></g><g class="fade" style="animation-delay:.64s" transform="translate(0 60)"><text y="13" class="stat-label">Total PRs:</text><text x="245" y="13" class="stat-value">${prs}</text></g><g class="fade" style="animation-delay:.76s" transform="translate(0 90)"><text y="13" class="stat-label">Total Issues:</text><text x="245" y="13" class="stat-value">${issues}</text></g><g class="fade" style="animation-delay:.88s" transform="translate(0 120)"><text y="13" class="stat-label">Contributed to (this year):</text><text x="245" y="13" class="stat-value">${contributedTo}</text></g><g transform="translate(560 68)"><circle r="46" stroke="#0f3809" stroke-width="7"/><circle r="46" stroke="#24e500" stroke-width="7" class="ring" stroke-linecap="round" transform="rotate(-90)"/><text y="5" text-anchor="middle" class="rank-text">${rank}</text><text y="23" text-anchor="middle" class="score-text">${score}/100</text></g></g>
 <line x1="28" y1="330" x2="772" y2="330" class="divider"/><text x="28" y="364" class="section-title">Most Used Languages</text><g clip-path="url(#bar-clip)">${languageBars}</g><g>${leftLanguages}</g><g>${rightLanguages}</g></svg>`;
 
