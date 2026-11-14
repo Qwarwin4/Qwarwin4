@@ -24,6 +24,7 @@ query($login: String!, $from: GitTimestamp!, $cursor: String) {
       totalCount
       pageInfo { hasNextPage endCursor }
       nodes {
+        isPrivate
         stargazerCount
         pullRequests(first: 1) { totalCount }
         issues(first: 1) { totalCount }
@@ -91,11 +92,14 @@ async function getStats() {
       commits += repo.defaultBranchRef?.target?.history?.totalCount || 0;
       prs += repo.pullRequests.totalCount;
       issues += repo.issues.totalCount;
-      for (const { size, node } of repo.languages.edges) {
-        const existing = languages.get(node.name) || { size: 0, color: node.color || '#24e500' };
-        existing.size += size;
-        if (node.color) existing.color = node.color;
-        languages.set(node.name, existing);
+      // языки — только публичные репозитории
+      if (!repo.isPrivate) {
+        for (const { size, node } of repo.languages.edges) {
+          const existing = languages.get(node.name) || { size: 0, color: node.color || '#24e500' };
+          existing.size += size;
+          if (node.color) existing.color = node.color;
+          languages.set(node.name, existing);
+        }
       }
     }
     cursor = repositories.pageInfo.hasNextPage ? repositories.pageInfo.endCursor : null;
